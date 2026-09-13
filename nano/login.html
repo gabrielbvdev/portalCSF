@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Campo Santo Familiar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            primary: '#0B4A3F', // Verde da marca
+                            light: '#E6F0EE',
+                            gold: '#D97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen relative overflow-hidden">
+    
+    <!-- Elementos decorativos de fundo -->
+    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-brand-gold rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+
+    <div class="w-full max-w-md bg-white p-8 md:p-10 rounded-2xl shadow-xl z-10 relative border border-gray-100 mx-4">
+        
+        <!-- Logo / Cabeçalho -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-brand-primary/20">
+                <i class="fa-solid fa-hands-holding-child text-brand-primary text-3xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800">Bem-vindo(a)</h1>
+            <p class="text-sm text-gray-500 mt-1">Acesse o Ecossistema Campo Santo Familiar</p>
+        </div>
+
+        <form onsubmit="handleLogin(event)" class="space-y-5">
+            
+            <!-- Campo de Usuário -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Usuário ou CPF</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-regular fa-user text-gray-400"></i>
+                    </div>
+                    <input type="text" id="username" required autocomplete="off" placeholder="Digite 'usuario' ou 'administrador'" 
+                        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none transition-all bg-gray-50 focus:bg-white">
+                </div>
+            </div>
+
+            <!-- Campo de Senha -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-lock text-gray-400"></i>
+                    </div>
+                    <input type="password" id="password" required placeholder="Sua senha secreta (senha)" 
+                        class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none transition-all bg-gray-50 focus:bg-white">
+                    
+                    <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-brand-primary transition-colors">
+                        <i class="fa-regular fa-eye" id="eye-icon"></i>
+                    </button>
+                </div>
+                <div class="flex justify-end mt-2">
+                    <a href="#" class="text-xs text-brand-primary font-medium hover:underline">Esqueceu a senha?</a>
+                </div>
+            </div>
+
+            <!-- Mensagem de Erro (Oculta por padrão) -->
+            <div id="error-message" class="hidden bg-red-50 border-l-4 border-red-500 p-3 rounded-r-lg flex items-center gap-2">
+                <i class="fa-solid fa-circle-exclamation text-red-500"></i>
+                <p class="text-xs text-red-700 font-medium">Usuário ou senha incorretos. Tente novamente.</p>
+            </div>
+
+            <button type="submit" class="w-full bg-brand-primary text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 group">
+                Entrar no Sistema
+                <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+            </button>
+
+        </form>
+
+        <!-- Dica para a apresentação -->
+        <div class="mt-8 pt-6 border-t border-gray-100 text-center bg-gray-50 rounded-lg p-3">
+            <p class="text-xs font-semibold text-gray-600 mb-2"><i class="fa-solid fa-lightbulb text-brand-gold"></i> Dica de acesso (Protótipo):</p>
+            <div class="flex flex-col gap-1 text-[11px] text-gray-500">
+                <p><strong>Cliente:</strong> login: <code class="bg-gray-200 px-1 rounded">usuario</code> | senha: <code class="bg-gray-200 px-1 rounded">senha</code></p>
+                <p><strong>Gestor:</strong> login: <code class="bg-gray-200 px-1 rounded">administrador</code> | senha: <code class="bg-gray-200 px-1 rounded">senha</code></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para mostrar/ocultar senha
+        function togglePassword() {
+            const passInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Lógica de validação e redirecionamento
+        function handleLogin(event) {
+            event.preventDefault(); // Impede o recarregamento da página
+
+            const user = document.getElementById('username').value.trim().toLowerCase();
+            const pass = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-message');
+
+            // Esconde a mensagem de erro inicialmente
+            errorMsg.classList.add('hidden');
+
+            // Validação das regras solicitadas
+            if (user === 'usuario' && pass === 'senha') {
+                // Redireciona para o painel do cliente
+                window.location.href = 'portal.html';
+            } 
+            else if (user === 'administrador' && pass === 'senha') {
+                // Redireciona para o painel de administração
+                window.location.href = 'admin.html';
+            } 
+            else {
+                // Exibe erro de credenciais inválidas
+                errorMsg.classList.remove('hidden');
+                
+                // Adiciona uma leve animação de tremor ao input para feedback visual
+                const formInputs = document.querySelectorAll('input');
+                formInputs.forEach(input => {
+                    input.classList.add('border-red-500');
+                    setTimeout(() => input.classList.remove('border-red-500'), 1500);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
