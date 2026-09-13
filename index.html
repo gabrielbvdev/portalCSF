@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal do Cliente | Campo Santo Familiar</title>
+    <title>Protótipo | Campo Santo Familiar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -16,10 +17,9 @@
                     },
                     colors: {
                         brand: {
-                            primary: '#0B4A3F', // Verde escuro principal da marca Campo Santo
-                            light: '#E6F0EE', // Fundo esverdeado claro
-                            gold: '#D97706', // Dourado mantido para destaques/moedas
-                            gray: '#F3F4F6'
+                            primary: '#0B4A3F', // Verde escuro da marca
+                            light: '#E6F0EE',
+                            gold: '#D97706',
                         }
                     }
                 }
@@ -29,534 +29,44 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F9FAFB;
-        }
-        /* Oculta as seções inativas */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Estilo para scrollbar invisível no mobile */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 flex items-center justify-center min-h-screen relative overflow-hidden">
+    
+    <!-- Elementos decorativos de fundo para manter a identidade -->
+    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-brand-gold rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
 
-    <div class="flex h-screen overflow-hidden">
+    <div class="w-full max-w-lg bg-white p-10 rounded-3xl shadow-2xl z-10 relative border border-gray-100 mx-4 text-center">
         
-        <!-- Sidebar (Desktop) -->
-        <aside class="hidden md:flex flex-col w-64 bg-brand-primary text-white shadow-xl">
-            <div class="p-6 flex flex-col items-center border-b border-white/10">
-                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 shadow-md">
-                    <i class="fa-solid fa-hands-holding-child text-brand-primary text-2xl"></i>
-                </div>
-                <h1 class="font-bold text-lg text-center leading-tight">Campo Santo<br>Familiar</h1>
-            </div>
-            
-            <nav class="flex-1 px-4 py-6 space-y-2">
-                <button onclick="switchTab('inicio')" id="btn-inicio" class="nav-btn w-full flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg text-left transition-colors text-white">
-                    <i class="fa-solid fa-house w-5 text-center"></i> Início
-                </button>
-                <button onclick="switchTab('dependentes')" id="btn-dependentes" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg text-left transition-colors text-white/70">
-                    <i class="fa-solid fa-users w-5 text-center"></i> Dependentes
-                </button>
-                <button onclick="switchTab('financeiro')" id="btn-financeiro" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg text-left transition-colors text-white/70">
-                    <i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i> Financeiro
-                </button>
-                <button onclick="switchTab('clube')" id="btn-clube" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg text-left transition-colors text-white/70">
-                    <i class="fa-solid fa-award w-5 text-center"></i> Clube & Moedas
-                </button>
-            </nav>
-            
-            <div class="p-4 border-t border-white/10">
-                <button class="w-full flex items-center gap-3 px-4 py-2 hover:bg-white/10 rounded-lg text-left transition-colors text-white/70">
-                    <i class="fa-solid fa-right-from-bracket w-5 text-center"></i> Sair
-                </button>
-            </div>
-        </aside>
+        <!-- Ícone representativo do projeto -->
+        <div class="w-20 h-20 bg-brand-light rounded-2xl flex items-center justify-center mx-auto mb-6 border-2 border-brand-primary/20 shadow-sm">
+            <i class="fa-solid fa-laptop-code text-brand-primary text-4xl"></i>
+        </div>
+        
+        <h1 class="text-3xl font-bold text-gray-800 mb-3">Ambiente de Homologação</h1>
+        
+        <div class="inline-block bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full mb-6 flex items-center justify-center gap-2 w-max mx-auto">
+            <i class="fa-solid fa-vial"></i> Versão de Protótipo (Sprint 1)
+        </div>
 
-        <!-- Main Content Area -->
-        <main class="flex-1 flex flex-col h-screen overflow-y-auto relative pb-20 md:pb-0">
-            
-            <!-- Topbar (Mobile & Desktop) - Adicionado isolate para corrigir bug de scroll -->
-            <header class="bg-white shadow-sm sticky top-0 z-40 isolate">
-                <div class="flex items-center justify-between px-6 py-4">
-                    <div class="md:hidden flex items-center gap-3">
-                        <i class="fa-solid fa-hands-holding-child text-brand-primary text-2xl"></i>
-                        <span class="font-bold text-brand-primary">Portal do Cliente</span>
-                    </div>
-                    <div class="hidden md:block">
-                        <h2 class="text-xl font-semibold text-gray-800" id="page-title">Visão Geral</h2>
-                    </div>
-                    
-                    <div class="flex items-center gap-4">
-                        <button class="relative p-2 text-gray-500 hover:text-brand-primary transition-colors">
-                            <i class="fa-regular fa-bell text-xl"></i>
-                            <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-                        </button>
-                        <div class="flex items-center gap-3 border-l pl-4 border-gray-200">
-                            <div class="text-right hidden sm:block">
-                                <p class="text-sm font-semibold text-gray-800">João da Silva</p>
-                                <p class="text-xs text-gray-500">Titular - Plano Tranquilidade</p>
-                            </div>
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Foto do Cliente João" class="w-10 h-10 rounded-full border-2 border-brand-primary object-cover shadow-sm">
-                        </div>
-                    </div>
-                </div>
-            </header>
+        <p class="text-gray-600 mb-8 leading-relaxed">
+            Bem-vindo(a)! Este é o ambiente de apresentação do novo <strong>Ecossistema Digital de Pós-Venda</strong> do Campo Santo Familiar.
+            <br><br>
+            Os dados apresentados a seguir são fictícios e foram criados exclusivamente para demonstrar o fluxo de navegação, o design das telas e as funcionalidades propostas.
+        </p>
 
-            <!-- Content Wrapper -->
-            <div class="p-4 md:p-8 max-w-7xl mx-auto w-full">
-                
-                <!-- TELA: INÍCIO -->
-                <section id="inicio" class="tab-content active">
-                    <div class="mb-6">
-                        <h3 class="text-2xl font-bold text-gray-800">Olá, João!</h3>
-                        <p class="text-gray-500">Bem-vindo ao seu portal de autosserviço.</p>
-                    </div>
+        <a href="/nano/login.html" class="inline-flex items-center justify-center gap-3 w-full sm:w-auto bg-brand-primary text-white font-bold px-8 py-4 rounded-xl hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl group">
+            Acessar o Protótipo
+            <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+        </a>
 
-                    <!-- Cards de Resumo -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <!-- Card Plano -->
-                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-start mb-4">
-                                    <div class="w-12 h-12 bg-brand-light rounded-xl flex items-center justify-center text-brand-primary">
-                                        <!-- Ícone alterado para casa conforme solicitado -->
-                                        <i class="fa-solid fa-house text-xl"></i>
-                                    </div>
-                                    <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">Ativo</span>
-                                </div>
-                                <p class="text-sm text-gray-500 font-medium">Meu Plano</p>
-                                <h4 class="text-xl font-bold text-brand-primary">Tranquilidade</h4>
-                                <p class="text-sm text-gray-500 mt-1">Até 80 anos • 10 Dependentes</p>
-                            </div>
-                            <button onclick="switchTab('dependentes')" class="mt-4 text-brand-primary font-semibold text-sm flex items-center gap-1 hover:underline">
-                                Ver dependentes <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-
-                        <!-- Card Fatura -->
-                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 border-l-4 border-l-brand-gold flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-start mb-4">
-                                    <div class="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center text-brand-gold">
-                                        <i class="fa-solid fa-file-invoice text-xl"></i>
-                                    </div>
-                                    <span class="text-xs font-bold text-gray-500">Vence em 15/09</span>
-                                </div>
-                                <p class="text-sm text-gray-500 font-medium">Próxima Fatura</p>
-                                <h4 class="text-2xl font-bold text-gray-800">R$ 119,90</h4>
-                            </div>
-                            <button onclick="openPixModal('119,90')" class="mt-4 w-full bg-brand-primary text-white py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors">
-                                Pagar com Pix
-                            </button>
-                        </div>
-
-                        <!-- Card Moedas -->
-                        <!-- Adicionado isolate para controle de z-index e removido backdrop-blur -->
-                        <div class="bg-gradient-to-br from-brand-primary to-green-900 rounded-2xl p-6 shadow-md text-white flex flex-col justify-between relative overflow-hidden isolate">
-                            <i class="fa-solid fa-coins absolute -bottom-4 -right-4 text-8xl opacity-10 -z-10"></i>
-                            <div class="relative z-10">
-                                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-brand-gold mb-4">
-                                    <i class="fa-solid fa-star text-xl"></i>
-                                </div>
-                                <p class="text-sm text-green-100 font-medium">Saldo Clube de Vantagens</p>
-                                <h4 class="text-3xl font-bold text-brand-gold mt-1">450 <span class="text-lg font-medium text-white">moedas</span></h4>
-                            </div>
-                            <button onclick="switchTab('clube')" class="relative z-10 mt-4 bg-white/20 hover:bg-white/30 text-white py-2 rounded-lg font-medium transition-colors border border-white/30">
-                                Resgatar Prêmios
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Ações Rápidas -->
-                    <h4 class="text-lg font-bold text-gray-800 mb-4">Acesso Rápido</h4>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <button class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-primary transition-colors group">
-                            <div class="w-10 h-10 rounded-full bg-brand-light text-brand-primary flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-user-pen"></i>
-                            </div>
-                            <span class="text-sm font-medium text-gray-700">Meus Dados</span>
-                        </button>
-                        <button class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-primary transition-colors group">
-                            <div class="w-10 h-10 rounded-full bg-brand-light text-brand-primary flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-file-pdf"></i>
-                            </div>
-                            <span class="text-sm font-medium text-gray-700">Meu Contrato</span>
-                        </button>
-                        <button class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-3 hover:border-brand-primary transition-colors group">
-                            <div class="w-10 h-10 rounded-full bg-brand-light text-brand-primary flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-id-card"></i>
-                            </div>
-                            <span class="text-sm font-medium text-gray-700">Cartão Virtual</span>
-                        </button>
-                        <button class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-3 hover:border-red-600 transition-colors group">
-                            <div class="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-phone-volume"></i>
-                            </div>
-                            <span class="text-sm font-medium text-gray-700">Plantão 24h</span>
-                        </button>
-                    </div>
-                </section>
-
-                <!-- TELA: DEPENDENTES -->
-                <section id="dependentes" class="tab-content">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                        <div>
-                            <h3 class="text-2xl font-bold text-gray-800">Meus Dependentes</h3>
-                            <p class="text-gray-500">Gerencie as pessoas cobertas pelo seu Plano Tranquilidade.</p>
-                        </div>
-                        <span class="bg-brand-light text-brand-primary px-3 py-1 rounded-lg font-semibold text-sm">
-                            3 de 10 Vagas Utilizadas
-                        </span>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <ul class="divide-y divide-gray-100">
-                            <!-- Dependente 1 -->
-                            <li class="p-4 flex items-center justify-between hover:bg-gray-50">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center font-bold text-lg">
-                                        MS
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Maria da Silva</p>
-                                        <p class="text-sm text-gray-500">Cônjuge • 58 anos</p>
-                                    </div>
-                                </div>
-                                <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">Ativo</span>
-                            </li>
-                            <!-- Dependente 2 -->
-                            <li class="p-4 flex items-center justify-between hover:bg-gray-50">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg">
-                                        PS
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Pedro da Silva</p>
-                                        <p class="text-sm text-gray-500">Filho • 25 anos</p>
-                                    </div>
-                                </div>
-                                <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">Ativo</span>
-                            </li>
-                            <!-- Dependente 3 -->
-                            <li class="p-4 flex items-center justify-between hover:bg-gray-50">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-lg">
-                                        AS
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Ana Souza da Silva</p>
-                                        <p class="text-sm text-gray-500">Mãe • 78 anos</p>
-                                    </div>
-                                </div>
-                                <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">Ativo</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div class="mt-6">
-                        <button class="w-full md:w-auto bg-white border border-brand-primary text-brand-primary px-6 py-3 rounded-xl font-semibold hover:bg-brand-light transition-colors flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-plus"></i> Solicitar Inclusão de Dependente
-                        </button>
-                    </div>
-                </section>
-
-                <!-- TELA: FINANCEIRO -->
-                <section id="financeiro" class="tab-content">
-                    <div class="mb-6">
-                        <h3 class="text-2xl font-bold text-gray-800">Histórico de Faturas</h3>
-                        <p class="text-gray-500">Acompanhe seus pagamentos e emita 2ª via.</p>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <ul class="divide-y divide-gray-100">
-                            <!-- Fatura Aberta -->
-                            <li class="p-5 hover:bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center">
-                                        <i class="fa-solid fa-clock text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold text-gray-800">Setembro / 2026</p>
-                                        <p class="text-sm text-gray-500">Vencimento: 15/09/2026</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4">
-                                    <div class="text-right">
-                                        <p class="font-bold text-lg text-gray-800">R$ 119,90</p>
-                                        <p class="text-xs text-yellow-600 font-semibold">Em Aberto</p>
-                                    </div>
-                                    <button onclick="openPixModal('119,90')" class="bg-brand-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors text-sm">
-                                        Pagar
-                                    </button>
-                                </div>
-                            </li>
-
-                            <!-- Fatura Paga 1 -->
-                            <li class="p-5 hover:bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center">
-                                        <i class="fa-solid fa-check text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold text-gray-800">Agosto / 2026</p>
-                                        <p class="text-sm text-gray-500">Pago em: 12/08/2026</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-6">
-                                    <div class="text-left sm:text-right">
-                                        <p class="font-bold text-lg text-gray-800">R$ 119,90</p>
-                                        <p class="text-xs text-green-600 font-semibold">Pago</p>
-                                    </div>
-                                    <button class="text-brand-primary font-medium hover:underline text-sm flex items-center gap-1">
-                                        <i class="fa-solid fa-download"></i> Recibo
-                                    </button>
-                                </div>
-                            </li>
-
-                            <!-- Fatura Paga 2 -->
-                            <li class="p-5 hover:bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 opacity-70">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center">
-                                        <i class="fa-solid fa-check text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold text-gray-800">Julho / 2026</p>
-                                        <p class="text-sm text-gray-500">Pago em: 14/07/2026</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-6">
-                                    <div class="text-left sm:text-right">
-                                        <p class="font-bold text-lg text-gray-800">R$ 119,90</p>
-                                        <p class="text-xs text-green-600 font-semibold">Pago</p>
-                                    </div>
-                                    <button class="text-brand-primary font-medium hover:underline text-sm flex items-center gap-1">
-                                        <i class="fa-solid fa-download"></i> Recibo
-                                    </button>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </section>
-
-                <!-- TELA: CLUBE E MOEDAS -->
-                <section id="clube" class="tab-content">
-                    <div class="mb-6">
-                        <h3 class="text-2xl font-bold text-gray-800">Clube de Benefícios</h3>
-                        <p class="text-gray-500">Suas ações valem moedas. Troque por descontos em parceiros!</p>
-                    </div>
-
-                    <!-- Header Gamificação -->
-                    <div class="bg-gradient-to-r from-brand-primary to-green-900 rounded-2xl p-6 shadow-md text-white flex flex-col md:flex-row items-center justify-between mb-8 gap-6">
-                        <div class="flex items-center gap-6 w-full md:w-auto">
-                            <div class="w-20 h-20 bg-brand-gold rounded-full flex items-center justify-center text-4xl border-4 border-white/20 shadow-lg">
-                                <i class="fa-solid fa-trophy text-white"></i>
-                            </div>
-                            <div>
-                                <p class="text-green-100">Seu saldo atual é de</p>
-                                <h4 class="text-4xl font-bold text-brand-gold">450 <span class="text-lg text-white font-normal">moedas</span></h4>
-                            </div>
-                        </div>
-                        <div class="w-full md:w-1/3 bg-white/10 rounded-xl p-4 border border-white/20">
-                            <p class="text-sm mb-2 flex justify-between"><span>Nível Ouro</span> <span>Faltam 50 moedas</span></p>
-                            <div class="w-full bg-green-900 rounded-full h-2.5">
-                                <div class="bg-brand-gold h-2.5 rounded-full" style="width: 90%"></div>
-                            </div>
-                            <p class="text-xs mt-2 text-green-100 text-right">para o Nível Diamante</p>
-                        </div>
-                    </div>
-
-                    <h4 class="text-lg font-bold text-gray-800 mb-4">Vitrine de Recompensas</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                        
-                        <!-- Produto 1 -->
-                        <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                            <div class="h-32 bg-brand-light flex items-center justify-center text-brand-primary relative">
-                                <i class="fa-solid fa-pills text-4xl"></i>
-                                <div class="absolute top-2 right-2 bg-brand-gold text-white text-xs font-bold px-2 py-1 rounded">200 Moedas</div>
-                            </div>
-                            <div class="p-5">
-                                <h5 class="font-bold text-gray-800 mb-1">Voucher Drogaria S. Paulo</h5>
-                                <p class="text-sm text-gray-500 mb-4">Ganhe 20% de desconto extra na compra de medicamentos genéricos.</p>
-                                <button class="w-full bg-gray-100 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-200 transition-colors">Resgatar</button>
-                            </div>
-                        </div>
-
-                        <!-- Produto 2 -->
-                        <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                            <div class="h-32 bg-brand-light flex items-center justify-center text-brand-primary relative">
-                                <i class="fa-solid fa-stethoscope text-4xl"></i>
-                                <div class="absolute top-2 right-2 bg-brand-gold text-white text-xs font-bold px-2 py-1 rounded">400 Moedas</div>
-                            </div>
-                            <div class="p-5">
-                                <h5 class="font-bold text-gray-800 mb-1">Consulta Santa Izabel</h5>
-                                <p class="text-sm text-gray-500 mb-4">Isenção da coparticipação em uma consulta clínica geral.</p>
-                                <button class="w-full bg-brand-primary text-white font-semibold py-2 rounded-lg hover:bg-opacity-90 transition-colors">Resgatar</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-            </div>
-        </main>
-    </div>
-
-    <!-- Mobile Bottom Navigation -->
-    <nav class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around items-center h-16 z-20 pb-safe">
-        <button onclick="switchTab('inicio')" class="mobile-nav-btn flex flex-col items-center justify-center w-full h-full text-brand-primary">
-            <i class="fa-solid fa-house mb-1"></i>
-            <span class="text-[10px] font-medium">Início</span>
-        </button>
-        <button onclick="switchTab('dependentes')" class="mobile-nav-btn flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-brand-primary transition-colors">
-            <i class="fa-solid fa-users mb-1"></i>
-            <span class="text-[10px] font-medium">Família</span>
-        </button>
-        <button onclick="switchTab('financeiro')" class="mobile-nav-btn flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-brand-primary transition-colors">
-            <i class="fa-solid fa-file-invoice-dollar mb-1"></i>
-            <span class="text-[10px] font-medium">Faturas</span>
-        </button>
-        <button onclick="switchTab('clube')" class="mobile-nav-btn flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-brand-primary transition-colors">
-            <i class="fa-solid fa-award mb-1"></i>
-            <span class="text-[10px] font-medium">Clube</span>
-        </button>
-    </nav>
-
-    <!-- Modal Pix -->
-    <div id="pix-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform scale-95 transition-transform duration-300" id="pix-modal-content">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                    <i class="fa-brands fa-pix text-teal-500"></i> Pagamento via Pix
-                </h3>
-                <button onclick="closePixModal()" class="text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-            
-            <div class="p-6 flex flex-col items-center">
-                <p class="text-gray-500 text-center mb-4">Escaneie o QR Code abaixo com o aplicativo do seu banco para pagar a fatura no valor de <strong class="text-gray-800" id="pix-value">R$ 0,00</strong>.</p>
-                
-                <!-- Mock QR Code -->
-                <div class="w-48 h-48 bg-white border-2 border-gray-200 p-2 rounded-xl mb-6 flex justify-center items-center">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=MockupPixCampoSanto&color=0B4A3F" alt="QR Code Pix" class="w-full h-full rounded-lg">
-                </div>
-
-                <p class="text-sm text-gray-400 mb-2">Ou copie o código abaixo:</p>
-                
-                <div class="w-full flex">
-                    <input type="text" value="00020126580014br.gov.bcb.pix0136mockup-chave-aleatoria-campo-santo..." readonly class="w-full bg-gray-50 border border-gray-200 rounded-l-lg px-3 py-2 text-sm text-gray-500 outline-none truncate">
-                    <button onclick="copyPixCode()" class="bg-brand-primary hover:bg-opacity-90 transition-colors text-white px-4 py-2 rounded-r-lg flex items-center gap-2 font-medium">
-                        <i class="fa-regular fa-copy"></i> Copiar
-                    </button>
-                </div>
-                
-                <p id="copy-success" class="text-green-600 text-sm font-medium mt-3 opacity-0 transition-opacity">Código copiado com sucesso!</p>
-            </div>
-            
-            <div class="bg-gray-50 p-4 rounded-b-2xl text-center">
-                <p class="text-xs text-gray-500"><i class="fa-solid fa-shield-halved text-brand-primary mr-1"></i> Transação 100% segura. O pagamento é reconhecido em até 5 minutos.</p>
-            </div>
+        <!-- Rodapé do Card -->
+        <div class="mt-10 pt-6 border-t border-gray-100">
+            <p class="text-xs text-gray-400">Desenvolvido por Gabriel Bomfim • Engenharia de Software</p>
         </div>
     </div>
 
-    <script>
-        // Mapeamento de Títulos das páginas
-        const titles = {
-            'inicio': 'Visão Geral',
-            'dependentes': 'Meus Dependentes',
-            'financeiro': 'Financeiro',
-            'clube': 'Clube de Benefícios'
-        };
-
-        // Função para alternar abas
-        function switchTab(tabId) {
-            // 1. Esconder todos os conteúdos
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            // 2. Mostrar o conteúdo alvo
-            document.getElementById(tabId).classList.add('active');
-
-            // 3. Atualizar Título no Header (Desktop)
-            document.getElementById('page-title').innerText = titles[tabId];
-
-            // 4. Atualizar Menu Sidebar (Desktop)
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-white/10', 'text-white');
-                btn.classList.add('text-white/70');
-            });
-            const activeDesktopBtn = document.getElementById(`btn-${tabId}`);
-            if(activeDesktopBtn) {
-                activeDesktopBtn.classList.remove('text-white/70');
-                activeDesktopBtn.classList.add('bg-white/10', 'text-white');
-            }
-
-            // 5. Atualizar Menu Inferior (Mobile)
-            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
-                btn.classList.remove('text-brand-primary');
-                btn.classList.add('text-gray-400');
-            });
-            
-            // Busca o botão mobile pelo onclick attribute
-            const mobileBtn = document.querySelector(`.mobile-nav-btn[onclick="switchTab('${tabId}')"]`);
-            if(mobileBtn) {
-                mobileBtn.classList.remove('text-gray-400');
-                mobileBtn.classList.add('text-brand-primary');
-            }
-            
-            // 6. Rolar para o topo
-            document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Funções do Modal PIX
-        function openPixModal(valor) {
-            document.getElementById('pix-value').innerText = `R$ ${valor}`;
-            const modal = document.getElementById('pix-modal');
-            const content = document.getElementById('pix-modal-content');
-            
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            content.classList.remove('scale-95');
-            content.classList.add('scale-100');
-        }
-
-        function closePixModal() {
-            const modal = document.getElementById('pix-modal');
-            const content = document.getElementById('pix-modal-content');
-            
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            
-            // Reseta a mensagem de cópia
-            document.getElementById('copy-success').classList.add('opacity-0');
-        }
-
-        // Função mockada para copiar código Pix
-        function copyPixCode() {
-            const successMsg = document.getElementById('copy-success');
-            successMsg.classList.remove('opacity-0');
-            
-            // Esconde a mensagem após 3 segundos
-            setTimeout(() => {
-                successMsg.classList.add('opacity-0');
-            }, 3000);
-        }
-    </script>
 </body>
 </html>
