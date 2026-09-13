@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo | Campo Santo Familiar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            primary: '#0B4A3F', // Verde escuro principal da marca Campo Santo
+                            light: '#E6F0EE', // Fundo esverdeado claro
+                            gold: '#D97706', // Dourado mantido para destaques/moedas
+                            gray: '#F3F4F6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .table-scroll::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-gray-800 flex h-screen overflow-hidden relative">
+
+    <!-- Overlay Mobile -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity" onclick="toggleMobileMenu()"></div>
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-50 flex flex-col w-64 bg-brand-primary text-white shadow-xl">
+        <div class="p-6 flex flex-col items-center border-b border-white/10 relative">
+            <button onclick="toggleMobileMenu()" class="md:hidden absolute top-4 right-4 text-white/50 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center mb-3 shadow-md">
+                <i class="fa-solid fa-shield-halved text-brand-primary text-xl"></i>
+            </div>
+            <h1 class="font-bold text-lg text-center leading-tight">Painel Gestão<br><span class="text-sm font-normal opacity-80">Campo Santo Familiar</span></h1>
+        </div>
+        
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <p class="px-4 text-xs font-semibold text-brand-gold uppercase tracking-wider mb-2">Visão Geral</p>
+            <button onclick="switchAdminTab('dashboard')" id="btn-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg text-left transition-colors text-white">
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
+            </button>
+            
+            <p class="px-4 text-xs font-semibold text-brand-gold uppercase tracking-wider mb-2 mt-6">Operação</p>
+            <button onclick="switchAdminTab('clientes')" id="btn-clientes" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg text-left transition-colors text-white/70">
+                <i class="fa-solid fa-users w-5 text-center"></i> Gestão de Clientes
+            </button>
+            <button onclick="switchAdminTab('logs')" id="btn-logs" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg text-left transition-colors text-white/70">
+                <i class="fa-solid fa-list-check w-5 text-center"></i> Auditoria / Logs
+            </button>
+        </nav>
+        
+        <div class="p-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-4 py-3 mb-2 rounded-lg bg-black/20">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Admin" class="w-8 h-8 rounded-full border border-white/30 object-cover">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-white truncate">Carla Mendes</p>
+                    <p class="text-xs text-white/60 truncate">Gerente de Relacionamento</p>
+                </div>
+            </div>
+            <button class="w-full flex items-center gap-3 px-4 py-2 hover:bg-red-500/20 hover:text-red-300 rounded-lg text-left transition-colors text-white/70">
+                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i> Sair do Sistema
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto relative bg-gray-50">
+        
+        <!-- Topbar -->
+        <header class="bg-white shadow-sm sticky top-0 z-30 isolate border-b border-gray-200">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="md:hidden flex items-center gap-3">
+                    <button onclick="toggleMobileMenu()" class="text-gray-500 hover:text-brand-primary transition-colors p-1">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <span class="font-bold text-brand-primary">Gestão Campo Santo</span>
+                </div>
+                <div class="hidden md:block">
+                    <h2 class="text-xl font-bold text-gray-800" id="page-title">Dashboard</h2>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="Busca global rápida..." class="hidden md:block pl-10 pr-4 py-2 bg-gray-100 border-transparent rounded-lg text-sm focus:border-brand-primary focus:bg-white focus:ring-0 w-64 transition-all">
+                    </div>
+                    <button class="relative p-2 text-gray-500 hover:text-brand-primary transition-colors bg-gray-100 rounded-full">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-brand-gold rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Wrapper -->
+        <div class="p-4 md:p-8 max-w-7xl mx-auto w-full">
+            
+            <!-- TELA: DASHBOARD -->
+            <section id="dashboard" class="tab-content active">
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium text-gray-500">Resumo da Operação</h3>
+                    <p class="text-sm text-gray-400">Dados atualizados em tempo real.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Clientes Ativos -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Clientes Ativos</p>
+                                <h4 class="text-3xl font-bold text-gray-800 mt-2">18.452</h4>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-green-600 mt-4 font-medium flex items-center gap-1">
+                            <i class="fa-solid fa-arrow-trend-up"></i> +120 neste mês
+                        </p>
+                    </div>
+
+                    <!-- Inadimplentes -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Inadimplentes</p>
+                                <h4 class="text-3xl font-bold text-gray-800 mt-2">1.240</h4>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                                <i class="fa-solid fa-user-xmark"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-red-600 mt-4 font-medium flex items-center gap-1">
+                            <i class="fa-solid fa-arrow-trend-up"></i> 6.7% da base
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col">
+                        <h4 class="font-bold text-gray-800 mb-4">Logs Recentes</h4>
+                        <div class="flex-1 space-y-4 overflow-hidden">
+                            <div class="flex gap-3 items-start">
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-green-500 shrink-0"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Pagamento Pix Confirmado</p>
+                                    <p class="text-xs text-gray-500">João da Silva - Há 2 min</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 items-start">
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-blue-500 shrink-0"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Login realizado (App)</p>
+                                    <p class="text-xs text-gray-500">Maria Oliveira - Há 15 min</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 items-start">
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-brand-gold shrink-0"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Resgate de Recompensa</p>
+                                    <p class="text-xs text-gray-500">Carlos Eduardo - Há 42 min</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 items-start">
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-red-500 shrink-0"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Falha ao emitir boleto (API)</p>
+                                    <p class="text-xs text-gray-500">Sistema ERP - Há 1 hora</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="switchAdminTab('logs')" class="mt-4 text-sm text-brand-primary font-medium hover:underline text-left">Ver todos os logs &rarr;</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TELA: CLIENTES -->
+            <section id="clientes" class="tab-content">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">Gestão de Clientes</h3>
+                        <p class="text-gray-500">Consulte a base de titulares e seus respectivos status.</p>
+                    </div>
+                    <div class="flex gap-3 w-full md:w-auto">
+                        <button class="bg-brand-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-opacity-90 flex items-center gap-2">
+                            <i class="fa-solid fa-file-export"></i> Exportar CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-t-2xl border border-gray-200 border-b-0 flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div class="relative w-full md:w-96">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="search-client" placeholder="Buscar por Nome, CPF ou Contrato..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-brand-primary focus:border-brand-primary outline-none">
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto overflow-x-auto no-scrollbar">
+                        <select id="filter-status" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 outline-none focus:border-brand-primary">
+                            <option value="todos">Todos os Status</option>
+                            <option value="ativo">Ativo</option>
+                            <option value="inadimplente">Inadimplente</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-b-2xl shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto table-scroll">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500 font-semibold">
+                                    <th class="px-6 py-4">Titular / CPF</th>
+                                    <th class="px-6 py-4">Plano</th>
+                                    <th class="px-6 py-4">Dependentes</th>
+                                    <th class="px-6 py-4">Status Financeiro</th>
+                                    <th class="px-6 py-4 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100" id="client-table-body">
+                                <!-- Preenchido via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="p-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-500">
+                        <span>Mostrando registros filtrados</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TELA: LOGS / AUDITORIA -->
+            <section id="logs" class="tab-content">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Auditoria e Logs de Sistema</h3>
+                    <p class="text-gray-500">Rastreabilidade completa de ações no Portal do Cliente.</p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="p-4 border-b border-gray-200 bg-gray-50 flex gap-4 items-center overflow-x-auto">
+                        <input type="date" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700">
+                        <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 w-48">
+                            <option>Tipo de Ação</option>
+                            <option>Autenticação</option>
+                            <option>Financeiro</option>
+                            <option>Gamificação</option>
+                            <option>Cadastral</option>
+                        </select>
+                        <input type="text" placeholder="Buscar por ID ou Nome..." class="min-w-[200px] flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm">
+                        <button class="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Filtrar</button>
+                    </div>
+                    
+                    <div class="overflow-x-auto table-scroll">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-gray-100/50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500 font-semibold">
+                                    <th class="px-6 py-3">Data/Hora</th>
+                                    <th class="px-6 py-3">Cliente (ID/Nome)</th>
+                                    <th class="px-6 py-3">Módulo</th>
+                                    <th class="px-6 py-3">Ação Registrada</th>
+                                    <th class="px-6 py-3">IP Origem</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100" id="log-table-body">
+                                <!-- Preenchido via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal Histórico do Cliente -->
+    <div id="client-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] transform scale-95 transition-transform" id="client-modal-content">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-start bg-gray-50 rounded-t-2xl">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800" id="modal-client-name">Nome do Cliente</h3>
+                    <p class="text-sm text-gray-500" id="modal-client-cpf">CPF: 000.000.000-00</p>
+                </div>
+                <button onclick="closeClientModal()" class="text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full hover:bg-gray-200 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-1">
+                <h4 class="font-bold text-gray-700 mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-brand-primary"></i> Últimas interações no Portal</h4>
+                
+                <div class="relative border-l border-gray-200 ml-3 space-y-6" id="client-specific-logs">
+                    <!-- Preenchido via JS -->
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex justify-end gap-3">
+                <button onclick="closeClientModal()" class="px-4 py-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Dados Mockados ---
+        const clientes = [
+            { id: '1029', nome: 'João da Silva', cpf: '123.456.789-00', plano: 'Tranquilidade', dependentes: '3/10', status: 'ativo' },
+            { id: '2093', nome: 'Maria Aparecida Souza', cpf: '987.654.321-11', plano: 'Amparo', dependentes: '1/10', status: 'inadimplente' },
+            { id: '3441', nome: 'Carlos Eduardo Santos', cpf: '456.789.123-22', plano: 'Paz', dependentes: '8/10', status: 'ativo' },
+            { id: '4512', nome: 'Ana Beatriz Lima', cpf: '321.654.987-33', plano: 'Acolhimento', dependentes: '0/10', status: 'cancelado' },
+            { id: '5902', nome: 'Roberto Almeida', cpf: '741.852.963-44', plano: 'Tranquilidade', dependentes: '5/10', status: 'ativo' }
+        ];
+
+        const allLogs = [
+            { data: '12/09/2026 14:32:01', cliente: '1029 - João da Silva', modulo: 'Financeiro', acao: 'Gerou código Pix para fatura de Set/2026', ip: '177.10.45.12' },
+            { data: '12/09/2026 14:30:15', cliente: '1029 - João da Silva', modulo: 'Autenticação', acao: 'Login realizado com sucesso via Celular', ip: '177.10.45.12' },
+            { data: '12/09/2026 13:15:44', cliente: '3441 - Carlos E. Santos', modulo: 'Gamificação', acao: 'Resgatou voucher (200 moedas) - Drogaria', ip: '189.50.22.9' },
+            { data: '12/09/2026 10:05:12', cliente: '2093 - Maria Aparecida', modulo: 'Financeiro', acao: 'Visualizou fatura em atraso (Ago/2026)', ip: '201.33.11.5' },
+            { data: '11/09/2026 18:40:00', cliente: '5902 - Roberto Almeida', modulo: 'Cadastral', acao: 'Tentativa de adição de dependente excedente', ip: '179.99.10.2' },
+            { data: '11/09/2026 09:20:11', cliente: '1029 - João da Silva', modulo: 'Cadastral', acao: 'Atualizou número de telefone', ip: '177.10.45.12' }
+        ];
+
+        const statusConfig = {
+            'ativo': { class: 'bg-green-100 text-green-700', text: 'Ativo', icon: 'fa-circle-check' },
+            'inadimplente': { class: 'bg-red-100 text-red-700', text: 'Inadimplente', icon: 'fa-circle-exclamation' },
+            'cancelado': { class: 'bg-gray-100 text-gray-600', text: 'Cancelado', icon: 'fa-ban' }
+        };
+
+        const titles = {
+            'dashboard': 'Dashboard',
+            'clientes': 'Gestão de Clientes',
+            'logs': 'Auditoria de Sistema'
+        };
+
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('page-title').innerText = titles[tabId];
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-white/10', 'text-white');
+                btn.classList.add('text-white/70');
+            });
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-white/70');
+                activeBtn.classList.add('bg-white/10', 'text-white');
+            }
+
+            if (window.innerWidth < 768) {
+                const sidebar = document.getElementById('sidebar');
+                if (!sidebar.classList.contains('-translate-x-full')) {
+                    toggleMobileMenu();
+                }
+            }
+        }
+
+        function renderClientes(filtroStr = '', filtroStatus = 'todos') {
+            const tbody = document.getElementById('client-table-body');
+            tbody.innerHTML = '';
+
+            const filtrados = clientes.filter(c => {
+                const matchTexto = c.nome.toLowerCase().includes(filtroStr.toLowerCase()) || c.cpf.includes(filtroStr);
+                const matchStatus = filtroStatus === 'todos' || c.status === filtroStatus;
+                return matchTexto && matchStatus;
+            });
+
+            filtrados.forEach(c => {
+                const s = statusConfig[c.status];
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4">
+                        <div class="flex flex-col">
+                            <span class="font-semibold text-gray-800">${c.nome}</span>
+                            <span class="text-xs text-gray-500">${c.cpf}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4"><span class="font-medium text-gray-700">${c.plano}</span></td>
+                    <td class="px-6 py-4"><span class="text-sm text-gray-600">${c.dependentes} vagas</span></td>
+                    <td class="px-6 py-4">
+                        <span class="${s.class} text-xs font-bold px-2 py-1 rounded-full flex items-center w-max gap-1">
+                            <i class="fa-solid ${s.icon}"></i> ${s.text}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="openClientModal('${c.id}')" class="text-brand-primary hover:text-brand-gold bg-brand-light hover:bg-opacity-80 p-2 rounded transition-colors" title="Ver Histórico de Logs">
+                            <i class="fa-solid fa-list-ol"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderLogs() {
+            const tbody = document.getElementById('log-table-body');
+            tbody.innerHTML = '';
+
+            allLogs.forEach(log => {
+                let badgeColor = 'bg-gray-100 text-gray-700';
+                if(log.modulo === 'Financeiro') badgeColor = 'bg-blue-100 text-blue-700';
+                if(log.modulo === 'Gamificação') badgeColor = 'bg-yellow-100 text-yellow-700';
+                if(log.modulo === 'Autenticação') badgeColor = 'bg-green-100 text-green-700';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-white transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-3 whitespace-nowrap text-gray-500">${log.data}</td>
+                    <td class="px-6 py-3 font-medium text-gray-800">${log.cliente}</td>
+                    <td class="px-6 py-3"><span class="px-2 py-1 rounded text-xs font-semibold ${badgeColor}">${log.modulo}</span></td>
+                    <td class="px-6 py-3 text-gray-600">${log.acao}</td>
+                    <td class="px-6 py-3 text-gray-400 font-mono text-xs">${log.ip}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openClientModal(id) {
+            const cliente = clientes.find(c => c.id === id);
+            if(!cliente) return;
+
+            document.getElementById('modal-client-name').innerText = `${cliente.nome} (ID: ${cliente.id})`;
+            document.getElementById('modal-client-cpf').innerText = `CPF: ${cliente.cpf} | Plano: ${cliente.plano}`;
+
+            const clLogs = allLogs.filter(l => l.cliente.includes(id));
+            const logContainer = document.getElementById('client-specific-logs');
+            logContainer.innerHTML = '';
+
+            if(clLogs.length === 0) {
+                logContainer.innerHTML = '<p class="text-sm text-gray-500 ml-6">Nenhuma interação recente registrada.</p>';
+            } else {
+                clLogs.forEach(log => {
+                    logContainer.innerHTML += `
+                        <div class="relative pl-6">
+                            <span class="absolute -left-1.5 top-1 w-3 h-3 rounded-full bg-brand-primary border-2 border-white"></span>
+                            <p class="text-xs font-bold text-gray-400 mb-1">${log.data.split(' ')[0]} às ${log.data.split(' ')[1]}</p>
+                            <div class="bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
+                                <p class="text-sm font-medium text-gray-800">${log.acao}</p>
+                                <p class="text-xs text-brand-primary mt-1">Módulo: ${log.modulo} | IP: ${log.ip}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            const modal = document.getElementById('client-modal');
+            const content = document.getElementById('client-modal-content');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            setTimeout(() => {
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeClientModal() {
+            const modal = document.getElementById('client-modal');
+            const content = document.getElementById('client-modal-content');
+            
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 200);
+        }
+
+        window.onload = () => {
+            renderClientes();
+            renderLogs();
+
+            const searchInput = document.getElementById('search-client');
+            const statusSelect = document.getElementById('filter-status');
+
+            const filterAction = () => {
+                renderClientes(searchInput.value, statusSelect.value);
+            };
+
+            searchInput.addEventListener('input', filterAction);
+            statusSelect.addEventListener('change', filterAction);
+        };
+    </script>
+</body>
+</html>
