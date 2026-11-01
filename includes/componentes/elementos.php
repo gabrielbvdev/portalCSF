@@ -34,6 +34,30 @@ function selo(string $texto, string $cor = 'sucesso'): string
     return '<span class="rounded-full px-2 py-1 text-xs font-bold ' . ($cores[$cor] ?? $cores['neutro']) . '">' . escapar($texto) . '</span>';
 }
 
+// Etiqueta arredondada com iniciais dos nomes. Cores: sucesso, alerta, perigo, neutro, info.
+function seloIniciais(string $texto, string $cor = 'info'): string
+{
+    $cores = [
+        'sucesso' => 'bg-green-100 text-green-700',
+        'alerta' => 'bg-yellow-100 text-yellow-700',
+        'perigo' => 'bg-red-100 text-red-700',
+        'neutro' => 'bg-gray-100 text-gray-600',
+        'info' => 'bg-blue-100 text-blue-700',
+    ];
+
+    $palavras = explode(' ', $texto);
+    $filtradas = array_filter($palavras, function($palavra) {
+        return !in_array(mb_strtolower($palavra, "UTF-8"), ['de', 'da', 'do', 'das', 'dos', 'e']);
+    });
+    $filtradas = array_values($filtradas);
+
+    $inicial1 = mb_substr($filtradas[0] ?? '', 0, 1, "UTF-8");
+    $inicial2 = mb_substr($filtradas[1] ?? '', 0, 1, "UTF-8");
+    $iniciais = mb_strtoupper($inicial1 . $inicial2, "UTF-8");
+
+    return '<div class="w-12 h-12 rounded-full '.$cores[$cor].' flex items-center justify-center font-bold text-lg">'.$iniciais.'</div>';
+};
+
 /*
  * Card de informação.
  * $icone, $superior, $descricao e $rodape aceitam HTML pronto (escape o que vier de usuário/banco).

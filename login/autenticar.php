@@ -21,6 +21,7 @@ function iniciarSessaoDoUsuario(array $usuario, bool $precisaTrocarSenha): void
     $_SESSION['usuario_nome'] = $usuario['nome_completo'];
     $_SESSION['usuario_cpf'] = $usuario['cpf'];
     $_SESSION['usuario_status'] = $usuario['status'];
+    $_SESSION['usuario_data_nascimento'] = $usuario['data_nascimento'];
     $_SESSION['usuario_perfil'] = 'cliente';
     $_SESSION['forcar_troca_senha'] = $precisaTrocarSenha;
 }
