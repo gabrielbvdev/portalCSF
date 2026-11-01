@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once dirname(__DIR__) . '/includes/framework.php';
 require_once dirname(__DIR__) . '/includes/database.php';
 
@@ -9,7 +9,6 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $idUsuario = (int) ($_SESSION['usuario_id'] ?? 0);
 $nomeUsuario = $_SESSION['usuario_nome'] ?? 'Cliente';
-$cpfUsuario = $_SESSION['usuario_cpf'] ?? '---';
 
 $usuarios = dbQuery('SELECT deve_trocar_senha, senha_hash FROM adm_clientes WHERE id = :id LIMIT 1', ['id' => $idUsuario]);
 $usuario = $usuarios[0] ?? null;
@@ -19,30 +18,127 @@ $exigeTrocaSenha = !empty($_SESSION['forcar_troca_senha'])
 $contratos = dbQuery('SELECT cp.*, vp.nome_produto, vp.tipo_produto FROM adm_clientes_produtos cp LEFT JOIN vitrine_produtos vp ON vp.id = cp.id_vitrine_produto WHERE cp.id_cliente = :id_cliente ORDER BY cp.data_contratacao DESC LIMIT 1', ['id_cliente' => $idUsuario]);
 $contrato = $contratos[0] ?? null;
 
+$nomePlano = trim((string) ($contrato['nome_produto'] ?? '')) ?: 'Plano não identificado';
+$statusContrato = strtolower(trim((string) ($contrato['status'] ?? 'ativo'))) ?: 'ativo';
+
+$totalDependentes = (int) (dbQuery('SELECT COUNT(*) AS total FROM adm_dependentes WHERE id_cliente = :id_cliente', ['id_cliente' => $idUsuario])[0]['total'] ?? 0);
+
 $pagamentos = dbQuery('SELECT * FROM adm_pagamentos WHERE id_cliente = :id_cliente ORDER BY data_vencimento ASC', ['id_cliente' => $idUsuario]) ?: [];
 
-$pagamentosPendentes = 0;
-$proximoVencimento = null;
+$proximaFatura = null;
 foreach ($pagamentos as $pagamento) {
-    $status = trim((string) ($pagamento['status_pagamento'] ?? ''));
-    if (in_array($status, ['pendente', 'Em Atraso', 'A Receber'], true)) {
-        $pagamentosPendentes++;
-    }
-
+    $statusPagamento = trim((string) ($pagamento['status_pagamento'] ?? ''));
     $vencimento = trim((string) ($pagamento['data_vencimento'] ?? ''));
-    if ($vencimento !== '' && ($proximoVencimento === null || $vencimento < $proximoVencimento)) {
-        $proximoVencimento = $vencimento;
+    if (in_array($statusPagamento, ['pendente', 'Em Atraso', 'A Receber'], true) && $vencimento !== '') {
+        $proximaFatura = $pagamento;
+        break;
     }
 }
 
 $consultaSaldo = dbQuery('SELECT saldo_moedas FROM gamificacao_saldo WHERE id_cliente = :id_cliente ORDER BY data_atualizacao DESC LIMIT 1', ['id_cliente' => $idUsuario]);
 $saldoAtual = (int) ($consultaSaldo[0]['saldo_moedas'] ?? 0);
 
-$nomePlano = trim((string) ($contrato['nome_produto'] ?? 'Plano não identificado'));
-$statusContrato = trim((string) ($contrato['status'] ?? 'ativo')) ?: 'ativo';
-$rotuloProximoVencimento = $proximoVencimento ? date('d/m/Y', strtotime($proximoVencimento)) : 'Sem vencimento';
+$pagina = new Pagina('Painel', 'bg-gray-50 text-gray-800');
 
-$pagina = new Pagina('Painel', 'bg-marca-clara min-h-screen text-gray-700');
+// Cartão: Meu Plano
+$primeiroNome = escapar(mb_convert_case(explode(' ', trim($nomeUsuario))[0] ?? $nomeUsuario, MB_CASE_TITLE));
+$seloStatus = selo(mb_convert_case($statusContrato, MB_CASE_TITLE), $statusContrato === 'ativo' ? 'sucesso' : 'neutro');
+$nomePlanoEscapado = escapar($nomePlano);
+$textoDependentes = $totalDependentes . ' dependente' . ($totalDependentes === 1 ? '' : 's');
+
+$temDependentes = paginaPortalExiste('dependentes');
+$linkDependentes = botao(
+    $temDependentes ? 'Ver dependentes' : 'Ver dependentes · em breve',
+    'link',
+    href: APP_URL_BASE . '/dependentes/',
+    iconeDireita: $temDependentes ? 'fa-solid fa-arrow-right' : '',
+    desabilitado: !$temDependentes
+);
+
+// Cartão: Próxima Fatura
+if ($proximaFatura !== null) {
+    $valorFatura = escapar('R$ ' . number_format((float) $proximaFatura['valor'], 2, ',', '.'));
+    $vencimentoFatura = escapar('Vence em ' . date('d/m/Y', strtotime($proximaFatura['data_vencimento'])));
+} else {
+    $valorFatura = 'Em dia';
+    $vencimentoFatura = 'Nenhuma fatura em aberto';
+}
+
+// Cartão: Clube de Vantagens
+$saldoFormatado = escapar(number_format($saldoAtual, 0, ',', '.'));
+
+$temClube = paginaPortalExiste('clube');
+$linkClube = botao(
+    $temClube ? 'Resgatar Prêmios' : 'Resgatar Prêmios · em breve',
+    'claro',
+    href: APP_URL_BASE . '/clube/',
+    largo: true,
+    desabilitado: !$temClube
+);
+$cardPlano = card(
+    icone: '<i class="fa-solid fa-house"></i>',
+    superior: $seloStatus,
+    descricao: '<p class="text-sm font-medium text-gray-500">Meu Plano</p>'
+        . '<h4 class="text-xl font-bold text-marca-primaria">' . $nomePlanoEscapado . '</h4>'
+        . '<p class="mt-1 text-sm text-gray-500">' . $textoDependentes . '</p>',
+    rodape: $linkDependentes
+);
+
+$cardFatura = card(
+    icone: '<i class="fa-solid fa-file-invoice"></i>',
+    superior: '<span class="text-xs font-bold text-gray-500">' . $vencimentoFatura . '</span>',
+    descricao: '<p class="text-sm font-medium text-gray-500">Próxima Fatura</p>'
+        . '<h4 class="text-2xl font-bold text-gray-800">' . $valorFatura . '</h4>',
+    rodape: $proximaFatura !== null
+        ? botaoPagarPix((int) $proximaFatura['id'], largo: true)
+        : botao('Nenhuma fatura em aberto', largo: true, desabilitado: true),
+    corIcone: 'marca-destaque',
+    barra: true
+);
+
+$cardClube = card(
+    icone: '<i class="fa-solid fa-star"></i>',
+    descricao: '<p class="text-sm font-medium text-green-100">Saldo Clube de Vantagens</p>'
+        . '<h4 class="mt-1 text-3xl font-bold text-marca-destaque">' . $saldoFormatado . ' <span class="text-lg font-medium text-white">moedas</span></h4>',
+    rodape: $linkClube,
+    corFundo: 'marca-primaria',
+    corIcone: 'marca-destaque'
+);
+
+// Acesso Rápido (ainda sem destino)
+$acessosRapidos = [
+    ['rotulo' => 'Meus Dados', 'icone' => 'fa-solid fa-user-pen', 'perigo' => false],
+    ['rotulo' => 'Meu Contrato', 'icone' => 'fa-solid fa-file-pdf', 'perigo' => false],
+    ['rotulo' => 'Cartão Virtual', 'icone' => 'fa-solid fa-id-card', 'perigo' => false],
+    ['rotulo' => 'Plantão 24h', 'icone' => 'fa-solid fa-phone-volume', 'perigo' => true],
+];
+
+$htmlAcessosRapidos = '';
+foreach ($acessosRapidos as $acesso) {
+    $htmlAcessosRapidos .= botaoMedio($acesso['rotulo'], $acesso['icone'], $acesso['perigo'] ? 'vermelho' : 'marca-primaria');
+}
+$conteudo = <<<HTML
+<section>
+    <div class="mb-6">
+        <h3 class="text-2xl font-bold text-gray-800">Olá, {$primeiroNome}!</h3>
+        <p class="text-gray-500">Bem-vindo ao seu portal de autosserviço.</p>
+    </div>
+
+    <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+        {$cardPlano}
+        {$cardFatura}
+        {$cardClube}
+    </div>
+
+    <h4 class="mb-4 text-lg font-bold text-gray-800">Acesso Rápido</h4>
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">{$htmlAcessosRapidos}</div>
+</section>
+HTML;
+
+$subtituloUsuario = 'Titular - ' . $nomePlano;
+
+$pagina->html(layoutPortal('inicio', 'Visão Geral', $conteudo, $nomeUsuario, $subtituloUsuario));
+$pagina->html(modalPix());
 
 if ($exigeTrocaSenha) {
     $formularioTrocaSenha = formulario(
@@ -96,31 +192,5 @@ if ($exigeTrocaSenha) {
             });
 JS);
 }
-
-$nomeEscapado = escapar($nomeUsuario);
-
-$pagina->html(cabecalhoPortal($nomeUsuario, $cpfUsuario));
-
-$pagina->html(<<<HTML
-    <main class="mx-auto max-w-7xl px-6 py-10">
-        <div class="mb-8 rounded-3xl bg-gradient-to-r from-marca-primaria to-marca-secundaria p-8 text-white shadow-lg shadow-marca-primaria/20">
-            <p class="text-sm uppercase tracking-[0.25em] text-white/70">Painel do cliente</p>
-            <h2 class="mt-3 text-3xl font-bold">Bem-vindo, {$nomeEscapado}.</h2>
-            <p class="mt-2 max-w-xl text-sm text-white/80">Seu ecossistema digital de pós-venda está pronto para acompanhar planos, pagamentos, dependentes e benefícios.</p>
-        </div>
-
-        <div class="grid gap-5 md:grid-cols-3">
-HTML);
-
-$pagina->html(cartaoIndicador('Plano atual', $nomePlano ?: 'Plano não identificado', 'Status: ' . strtolower($statusContrato)));
-$pagina->html(cartaoIndicador(
-    'Pagamentos',
-    $pagamentosPendentes . ' pendente' . ($pagamentosPendentes === 1 ? '' : 's'),
-    'Próximo vencimento: ' . $rotuloProximoVencimento
-));
-$pagina->html(cartaoIndicador('Moedas de benefícios', (string) $saldoAtual, 'Saldo disponível no clube'));
-
-$pagina->html('        </div>
-    </main>');
 
 $pagina->exibir();

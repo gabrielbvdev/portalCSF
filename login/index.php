@@ -18,7 +18,7 @@ $formularioLogin = formulario(
     campo(nome: 'cpf', rotulo: 'CPF', icone: 'fa-solid fa-id-card', placeholder: 'Digite seu CPF', autocomplete: 'username')
     . campo(nome: 'senha', rotulo: 'Senha', tipo: 'password', icone: 'fa-solid fa-lock', placeholder: 'Digite sua senha', autocomplete: 'current-password', alternarSenha: true)
     . alerta('mensagemFormulario')
-    . botao('Acessar meu Portal', 'largo', id: 'botaoEnviar', tipo: 'submit', carregando: true),
+    . botao('Acessar meu Portal', 'primario', tamanho: 'grande', largo: true, id: 'botaoEnviar', tipo: 'submit', carregando: true),
     'space-y-5'
 );
 

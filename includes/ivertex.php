@@ -155,10 +155,11 @@ function buscarContratosNoIvertex(string $cpf): array
     return extrairColecaoIvertex($resposta, ['contratos', 'listaContratos', 'result', 'data', 'resultado']);
 }
 
-function buscarDocumentosNoIvertex(string $idContrato): array
+// Retorna null quando a consulta falha, para não confundir falha com "contrato sem documentos".
+function consultarDocumentosNoIvertex(string $idContrato): ?array
 {
     if ($idContrato === '') {
-        return [];
+        return null;
     }
 
     $dados = [
@@ -170,10 +171,31 @@ function buscarDocumentosNoIvertex(string $idContrato): array
 
     $resposta = requisicaoIvertex(IVERTEX_ENDPOINT_DOCUMENTOS . '?id_contrato=' . (int) $idContrato, $dados, 'POST');
     if ($resposta === null) {
-        return [];
+        return null;
     }
 
     return extrairColecaoIvertex($resposta, ['documentos', 'listaDocumentos', 'result', 'data', 'resultado']);
+}
+
+function buscarDocumentosNoIvertex(string $idContrato): array
+{
+    return consultarDocumentosNoIvertex($idContrato) ?? [];
+}
+
+// Gera o código Pix copia e cola de um documento. Retorna null se o iVertex falhar ou não trouxer o código.
+function gerarPixNoIvertex(int $idDocumento): ?string
+{
+    $resposta = requisicaoIvertex(IVERTEX_ENDPOINT_FORMA_PAGAMENTO, [
+        'filtros' => [
+            'id_documento' => $idDocumento,
+            'id_forma_pagamento' => 3,
+            'nome_forma_pagamento' => 'Pix',
+        ],
+    ], 'POST');
+
+    $codigo = trim((string) ($resposta['formaPagamento'] ?? ''));
+
+    return $codigo !== '' ? $codigo : null;
 }
 
 function buscarDependentesNoIvertex(string $cpf): array

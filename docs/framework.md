@@ -52,8 +52,7 @@ $faturas = dbQuery('SELECT * FROM adm_pagamentos WHERE id_cliente = :id', ['id' 
 $pagina = new Pagina('Minhas faturas', 'bg-marca-clara min-h-screen text-gray-700');
 
 // 3) Montar o conteúdo
-$pagina->html(cabecalhoPortal($_SESSION['usuario_nome'], $_SESSION['usuario_cpf']));
-$pagina->html('<main class="mx-auto max-w-7xl px-6 py-10">Conteúdo</main>');
+$pagina->html(layoutPortal('inicio', 'Meu título', '<p>Conteúdo</p>', $_SESSION['usuario_nome'], 'Titular'));
 
 // 4) JS e CSS opcionais
 $pagina->js("$('#algo').on('click', function () { mostrarAlerta('#aviso', 'Olá'); });");
@@ -92,23 +91,46 @@ Todos aceitam **argumentos nomeados** (PHP 8), o que deixa a chamada legível: `
 ```php
 botao(string $texto, string $variante = 'primario', string $id = '', string $tipo = 'button',
       string $href = '', string $icone = '', bool $carregando = false,
-      string $classe = '', array $atributos = []): string
+      string $classe = '', array $atributos = [], string $iconeDireita = '',
+      bool $desabilitado = false, string $tamanho = 'pequeno', bool $largo = false): string
 ```
 
 | Parâmetro | Detalhe |
 |---|---|
-| `variante` | `primario`, `secundario`, `largo` (100% de largura), `pilula`, `link` |
+| `variante` | Estilo/cor: `primario`, `secundario`, `pilula`, `link`, `claro` (translúcido, para fundos escuros) |
+| `tamanho` | `pequeno` (padrão), `medio`, `grande`. Não afeta a variante `link` |
+| `largo` | `true` ocupa a linha toda; combina com qualquer variante |
 | `tipo` | `button` ou `submit` |
 | `href` | Se informado, gera `<a>` em vez de `<button>` |
-| `icone` | Classe do Font Awesome, ex.: `fa-solid fa-circle-info` |
+| `icone` | Classe do Font Awesome, ex.: `fa-solid fa-circle-info` (antes do texto) |
+| `iconeDireita` | Classe do Font Awesome exibida depois do texto, ex.: `fa-solid fa-arrow-right` |
+| `desabilitado` | Visual esmaecido e sem ação. Com `href` vira `<span>`, sem `href` vira `<button disabled>` |
 | `carregando` | Adiciona spinner e permite usar `definirCarregando()` no JS |
 | `classe` | Classes Tailwind extras somadas à variante |
 | `atributos` | Atributos extras, ex.: `['data-abrir-modal' => 'meuModal']` |
 
 ```php
-botao('Acessar', 'largo', id: 'botaoEnviar', tipo: 'submit', carregando: true);
+botao('Acessar', tamanho: 'grande', largo: true, id: 'botaoEnviar', tipo: 'submit', carregando: true);
 botao('Sair', 'pilula', href: APP_URL_BASE . '/sair/');
 botao('Detalhes', 'link', icone: 'fa-solid fa-circle-info', atributos: ['data-abrir-modal' => 'modalDetalhes']);
+botao('Ver dependentes', 'link', href: '/dependentes/', iconeDireita: 'fa-solid fa-arrow-right');
+botao('Pagar com Pix · em breve', largo: true, desabilitado: true);
+```
+
+### `botaoMedio()`
+
+Botão com ícone num círculo e rótulo embaixo (ex.: Acesso Rápido).
+
+```php
+botaoMedio(string $rotulo, string $icone, string $cor = 'marca-primaria', string $href = '',
+           string $id = '', array $atributos = [], bool $desabilitado = false): string
+```
+
+`cor`: `marca-primaria` ou `vermelho`. Com `href` vira `<a>`, sem `href` vira `<button>`.
+Use dentro de uma grade, ex.: `<div class="grid grid-cols-2 gap-4 md:grid-cols-4">`.
+
+```php
+botaoMedio('Plantão 24h', 'fa-solid fa-phone-volume', 'vermelho', href: 'tel:08000000000');
 ```
 
 ### `campo()`
@@ -156,13 +178,93 @@ modal(string $id, string $titulo, string $conteudo, string $etiqueta = '', bool 
 - Abrir: qualquer elemento com `data-abrir-modal="idDoModal"` ou `abrirModal('id')` no JS.
 - Fechar: qualquer elemento com `data-fechar-modal` dentro do modal ou `fecharModal('id')`.
 
-### `cartaoIndicador()` e `cabecalhoPortal()`
+### `selo()`
+
+Etiqueta arredondada (ex.: "Ativo").
 
 ```php
-cartaoIndicador(string $rotulo, string $valor, string $detalhe = ''): string
-cabecalhoPortal(string $nome, string $cpf): string   // topo do portal com botão Sair
+selo(string $texto, string $cor = 'sucesso'): string
 ```
 
+Cores: `sucesso` (verde), `alerta` (amarelo), `perigo` (vermelho), `neutro` (cinza), `info` (azul).
+
+### `card()`
+
+Card de informação com ícone, campo superior direito, descrição e rodapé.
+
+```php
+card(
+    string $icone,
+    string $descricao,
+    string $superior = '',
+    string $rodape = '',
+    string $corFundo = 'branco',
+    string $corIcone = 'marca-primaria',
+    bool $barra = false
+): string
+```
+
+| Parâmetro | Descrição |
+|---|---|
+| `icone` | HTML do ícone, ex.: `'<i class="fa-solid fa-house"></i>'`. |
+| `descricao` | HTML livre. Defina tamanhos e pesos das linhas no próprio HTML. |
+| `superior` | HTML livre no canto superior direito (ex.: `selo('Ativo')` ou um texto). |
+| `rodape` | HTML livre (link, botão, texto). Vazio = sem rodapé. |
+| `corFundo` | `branco`, `marca-primaria` ou `marca-secundaria`. Fundos escuros deixam o texto branco e o ícone num badge translúcido. |
+| `corIcone` | `marca-primaria`, `marca-secundaria`, `marca-destaque`, `verde`, `vermelho`, `azul`, `cinza`. O fundo claro do badge do ícone é gerado automaticamente. |
+| `barra` | `true` exibe a barra lateral esquerda na cor do ícone. |
+
+```php
+echo card(
+    icone: '<i class="fa-solid fa-file-invoice"></i>',
+    superior: '<span class="text-xs font-bold text-gray-500">Vence em 10/11/2026</span>',
+    descricao: '<p class="text-sm text-gray-500">Próxima Fatura</p><h4 class="text-2xl font-bold text-gray-800">R$ 94,82</h4>',
+    rodape: botao('Pagar com Pix'),
+    corIcone: 'marca-destaque',
+    barra: true
+);
+```
+
+Escape com `escapar()` qualquer dado do banco antes de colocá-lo nos parâmetros HTML.
+
+### `tabela()`
+
+Tabela a partir de dois arrays: as colunas e as linhas de dados.
+
+```php
+tabela(array $colunas, array $linhas, bool $separador = true, bool $zebra = false, string $classe = ''): string
+```
+
+| Chave da coluna | Detalhe |
+|---|---|
+| `orientacao` | **Obrigatória.** `esquerda`, `direita` ou `centro`. Vale para o título e para os dados da coluna. |
+| `titulo` | Opcional. Se nenhuma coluna tiver título, a tabela não tem cabeçalho. |
+| `expandir` | `true` faz a coluna ocupar o espaço que sobra. As demais encolhem ao conteúdo. |
+| `mobile` | `false` esconde a coluna em telas pequenas (abaixo de 640px). |
+
+| Parâmetro | Detalhe |
+|---|---|
+| `colunas` | Lista de colunas (chaves acima). |
+| `linhas` | Lista de linhas. Cada linha é uma lista com os dados (HTML pronto) **na mesma ordem das colunas**. |
+| `separador` | Linha divisória entre as linhas. |
+| `zebra` | Alterna o fundo das linhas. |
+| `classe` | Classes extras no contêiner (que já tem rolagem horizontal). |
+
+```php
+echo tabela(
+    colunas: [
+        ['titulo' => 'Fatura', 'orientacao' => 'esquerda', 'expandir' => true],
+        ['titulo' => 'Valor', 'orientacao' => 'direita'],
+        ['titulo' => 'Status', 'orientacao' => 'centro', 'mobile' => false],
+    ],
+    linhas: [
+        ['Mensalidade 11/26', 'R$ 94,82', selo('Em Aberto', 'alerta')],
+    ],
+    zebra: true
+);
+```
+
+Escape com `escapar()` os dados do banco. A tabela não desenha borda nem sombra: envolva-a num `<div>` com as classes que quiser (veja `financeiro/index.php`).
 ### Utilitários (`base.php`)
 
 | Função | Uso |
