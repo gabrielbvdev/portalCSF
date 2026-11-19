@@ -56,9 +56,17 @@ $linkDependentes = botao(
 );
 
 // Cartão: Próxima Fatura
+$iconeFatura = '<i class="fa-solid fa-file-invoice"></i>';
+$descricaoFatura = 'Próxima fatura';
+$corFatura = 'marca-destaque';
 if ($proximaFatura !== null) {
     $valorFatura = escapar('R$ ' . number_format((float) $proximaFatura['valor'], 2, ',', '.'));
     $vencimentoFatura = escapar('Vence em ' . date('d/m/Y', strtotime($proximaFatura['data_vencimento'])));
+    if ($proximaFatura['data_vencimento'] < date('Y-m-d')) { 
+        $iconeFatura = '<i class="fa-solid fa-warning"></i>';
+        $descricaoFatura = 'Fatura vencida';
+        $corFatura = 'vermelho';
+    }
 } else {
     $valorFatura = 'Em dia';
     $vencimentoFatura = 'Nenhuma fatura em aberto';
@@ -85,14 +93,14 @@ $cardPlano = card(
 );
 
 $cardFatura = card(
-    icone: '<i class="fa-solid fa-file-invoice"></i>',
+    icone: $iconeFatura,
     superior: '<span class="text-xs font-bold text-gray-500">' . $vencimentoFatura . '</span>',
-    descricao: '<p class="text-sm font-medium text-gray-500">Próxima Fatura</p>'
+    descricao: '<p class="text-sm font-medium text-gray-500">'.$descricaoFatura.'</p>'
         . '<h4 class="text-2xl font-bold text-gray-800">' . $valorFatura . '</h4>',
     rodape: $proximaFatura !== null
         ? botaoPagarPix((int) $proximaFatura['id'], largo: true)
         : botao('Nenhuma fatura em aberto', largo: true, desabilitado: true),
-    corIcone: 'marca-destaque',
+    corIcone: $corFatura,
     barra: true
 );
 
