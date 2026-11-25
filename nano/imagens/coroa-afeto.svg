@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <defs>
+    <linearGradient id="f" x2="1" y2="1"><stop stop-color="#fbf4f1"/><stop offset="1" stop-color="#e3ddd2"/></linearGradient>
+    <radialGradient id="p"><stop stop-color="#f8e6e2"/><stop offset="1" stop-color="#d8a09b"/></radialGradient>
+    <g id="flor"><circle cy="-12" r="13" fill="url(#p)"/><circle cx="12" r="13" fill="url(#p)"/><circle cy="12" r="13" fill="url(#p)"/><circle cx="-12" r="13" fill="url(#p)"/><circle r="6" fill="#e1c387"/></g>
+    <g id="branca"><circle cy="-10" r="11" fill="#fffdf5"/><circle cx="10" r="11" fill="#fffdf5"/><circle cy="10" r="11" fill="#fffdf5"/><circle cx="-10" r="11" fill="#fffdf5"/><circle r="5" fill="#d9b96b"/></g>
+  </defs>
+  <rect width="640" height="480" fill="url(#f)"/>
+  <ellipse cx="320" cy="425" rx="150" ry="15" fill="#233d30" opacity=".1"/>
+  <path d="M281 352 256 425 M359 352 384 425" stroke="#997a55" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="320" cy="210" r="140" fill="none" stroke="#43664c" stroke-width="45"/>
+  <circle cx="320" cy="210" r="112" fill="#f3f0e9"/>
+  <g><use href="#flor" x="320" y="69"/><use href="#branca" x="249" y="87"/><use href="#flor" x="392" y="88"/><use href="#flor" x="198" y="136"/><use href="#branca" x="442" y="136"/><use href="#branca" x="178" y="204"/><use href="#flor" x="462" y="204"/><use href="#flor" x="194" y="273"/><use href="#branca" x="446" y="273"/><use href="#branca" x="243" y="328"/><use href="#flor" x="397" y="328"/><use href="#flor" x="320" y="347"/></g>
+  <path d="M267 190 Q320 180 373 190 L373 238 Q320 228 267 238Z" fill="#fffaf4" stroke="#e5d5c8"/>
+  <path d="M285 208h70 M293 218h54" stroke="#c9aaa1" stroke-width="3" stroke-linecap="round"/>
+</svg>
