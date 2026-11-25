@@ -180,10 +180,10 @@
                 </div>
                 <div class="grid items-start gap-6 md:grid-cols-3">
                     <div class="space-y-6 md:col-span-2">
-                        <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm" aria-live="polite">
-                            <p class="text-sm font-medium text-gray-500">Situação atual</p>
-                            <h2 id="status-titulo" class="mt-2 text-xl font-bold text-marca-primaria"></h2>
-                            <p id="status-descricao" class="mt-2 text-sm leading-6 text-gray-600"></p>
+                        <div id="status-cartao" class="rounded-2xl border p-6 shadow-sm" aria-live="polite">
+                            <p class="text-sm font-medium">Situação atual</p>
+                            <h2 id="status-titulo" class="mt-2 text-xl font-bold"></h2>
+                            <p id="status-descricao" class="mt-2 text-sm leading-6"></p>
                         </div>
                         <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
                             <h2 class="font-bold">Dados da compra</h2>
@@ -262,12 +262,20 @@
             { tipo: 'demanda', categoria: 'urnas', nome: 'Urna funerária Harmonia', descricao: 'Uma opção em tom de madeira escura.', imagem: 'imagens/urna-harmonia.svg', preco: 'R$ 1.800,00' }
         ];
         const statusDemanda = {
-            aguardando: { titulo: 'Aguardando fornecedor', descricao: 'Seu pagamento foi confirmado na simulação. Na loja real, a solicitação será enviada por WhatsApp aos fornecedores parceiros e aguardará uma resposta.' },
-            aceito: { titulo: 'Aceito por fornecedor', descricao: 'Um fornecedor aceitou a solicitação. Os demais não poderão aceitar o mesmo pedido.' },
-            atendimento: { titulo: 'Em atendimento', descricao: 'O fornecedor está cuidando dos próximos passos do seu pedido.' },
-            concluido: { titulo: 'Concluído', descricao: 'O pedido foi concluído.' },
-            indisponivel: { titulo: 'Cancelado por indisponibilidade', descricao: 'Nenhum fornecedor aceitou a solicitação. A devolução do pagamento deverá ser providenciada; o prazo e o procedimento ainda serão definidos.' },
-            reembolsado: { titulo: 'Devolução concluída', descricao: 'O pedido foi cancelado por indisponibilidade e a devolução foi concluída nesta simulação.' }
+            aguardando: { cor: 'alerta', titulo: 'Aguardando fornecedor', descricao: 'Seu pagamento foi confirmado na simulação. Na loja real, a solicitação será enviada por WhatsApp aos fornecedores parceiros e aguardará uma resposta.' },
+            aceito: { cor: 'info', titulo: 'Aceito por fornecedor', descricao: 'Um fornecedor aceitou a solicitação. Os demais não poderão aceitar o mesmo pedido.' },
+            atendimento: { cor: 'andamento', titulo: 'Em atendimento', descricao: 'O fornecedor está cuidando dos próximos passos do seu pedido.' },
+            concluido: { cor: 'sucesso', titulo: 'Concluído', descricao: 'O pedido foi concluído.' },
+            indisponivel: { cor: 'perigo', titulo: 'Cancelado por indisponibilidade', descricao: 'Nenhum fornecedor aceitou a solicitação. A devolução do pagamento deverá ser providenciada; o prazo e o procedimento ainda serão definidos.' },
+            reembolsado: { cor: 'devolucao', titulo: 'Devolução concluída', descricao: 'O pedido foi cancelado por indisponibilidade e a devolução foi concluída nesta simulação.' }
+        };
+        const coresStatus = {
+            alerta: { cartao: 'border-amber-200 bg-amber-50 text-amber-900', botao: 'border-amber-300 bg-amber-50 text-amber-900', ativo: 'border-amber-800 bg-amber-800 text-white' },
+            info: { cartao: 'border-blue-200 bg-blue-50 text-blue-900', botao: 'border-blue-300 bg-blue-50 text-blue-900', ativo: 'border-blue-800 bg-blue-800 text-white' },
+            andamento: { cartao: 'border-purple-200 bg-purple-50 text-purple-900', botao: 'border-purple-300 bg-purple-50 text-purple-900', ativo: 'border-purple-800 bg-purple-800 text-white' },
+            sucesso: { cartao: 'border-green-200 bg-green-50 text-green-900', botao: 'border-green-300 bg-green-50 text-green-900', ativo: 'border-green-800 bg-green-800 text-white' },
+            perigo: { cartao: 'border-red-200 bg-red-50 text-red-900', botao: 'border-red-300 bg-red-50 text-red-900', ativo: 'border-red-800 bg-red-800 text-white' },
+            devolucao: { cartao: 'border-teal-200 bg-teal-50 text-teal-900', botao: 'border-teal-300 bg-teal-50 text-teal-900', ativo: 'border-teal-800 bg-teal-800 text-white' }
         };
         let produtoSelecionado = null;
         let pedido = null;
@@ -367,7 +375,8 @@
                 ? 'Seu pedido ficará sujeito à disponibilidade dos fornecedores parceiros.'
                 : 'O administrativo receberá seus dados para providenciar o cadastro no iVertex e a formalização do contrato.';
             document.getElementById('painel-demonstracao').hidden = !sobDemanda;
-            const status = sobDemanda ? statusDemanda[pedido.status] : { titulo: 'Contratação em análise', descricao: 'O administrativo realizará o cadastro no iVertex e as tratativas para assinatura do contrato. Após o cadastro e a ativação do plano, você poderá acessar o portal e gerar o Pix das mensalidades.' };
+            const status = sobDemanda ? statusDemanda[pedido.status] : { cor: 'alerta', titulo: 'Contratação em análise', descricao: 'O administrativo realizará o cadastro no iVertex e as tratativas para assinatura do contrato. Após o cadastro e a ativação do plano, você poderá acessar o portal e gerar o Pix das mensalidades.' };
+            document.getElementById('status-cartao').className = 'rounded-2xl border p-6 shadow-sm ' + coresStatus[status.cor].cartao;
             document.getElementById('status-titulo').textContent = status.titulo;
             document.getElementById('status-descricao').textContent = status.descricao;
             const detalhes = [['Comprador', pedido.nome], ['E-mail', pedido.email], ['Produto', produto.nome]];
@@ -376,7 +385,8 @@
             document.querySelectorAll('[data-status]').forEach(botao => {
                 const ativo = botao.dataset.status === pedido.status;
                 botao.setAttribute('aria-pressed', String(ativo));
-                botao.className = 'rounded-lg border px-3 py-2 text-xs font-bold transition ' + (ativo ? 'border-amber-900 bg-amber-900 text-white' : 'border-amber-300 bg-white text-amber-900 hover:bg-amber-100');
+                const cores = coresStatus[statusDemanda[botao.dataset.status].cor];
+                botao.className = 'rounded-lg border px-3 py-2 text-xs font-bold transition ' + (ativo ? cores.ativo + ' ring-2 ring-gray-700 ring-offset-2' : cores.botao + ' hover:brightness-95');
             });
         }
 
