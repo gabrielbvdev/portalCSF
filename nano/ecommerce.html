@@ -8,7 +8,7 @@
     <link rel="icon" href="favicon-branco.png" type="image/png" media="(prefers-color-scheme: dark)">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -17,34 +17,48 @@
                 extend: {
                     colors: {
                         marca: {
-                            escura: '#0f2418',
-                            primaria: '#183724',
-                            secundaria: '#234e34',
-                            destaque: '#b69d5e',
-                            clara: '#f2f4ee'
+                            escura: '#141F1B',
+                            primaria: '#162D25',
+                            secundaria: '#192622',
+                            destaque: '#786634',
+                            'destaque-claro': '#CFC096',
+                            clara: '#E9ECE6'
+                        },
+                        gray: {
+                            50: '#F2F3F1',
+                            100: '#EFF0EE',
+                            200: '#B5BDAD',
+                            300: '#819270',
+                            400: '#819270',
+                            500: '#4D5645',
+                            600: '#4D5645',
+                            700: '#192622',
+                            800: '#162D25',
+                            900: '#141F1B'
                         }
                     },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                    fontFamily: { sans: ['Sora', 'sans-serif'], serif: ['Lora', 'serif'] }
                 }
             }
         };
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Sora', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Lora', serif; }
+        h1.font-bold, h2.font-bold, h3.font-bold, h4.font-bold { font-weight: 600; }
         [hidden] { display: none !important; }
-        dialog::backdrop { background: rgba(15, 36, 24, .65); }
-        input:focus, textarea:focus { outline: 2px solid #b69d5e; outline-offset: 1px; }
+        dialog::backdrop { background: rgba(20, 31, 27, .65); }
+        input:focus, textarea:focus { outline: 2px solid #786634; outline-offset: 1px; }
     </style>
 </head>
 <body class="min-h-screen bg-marca-clara text-gray-800">
     <div class="bg-amber-100 px-4 py-2 text-center text-xs font-semibold text-amber-900">
-        <i class="fa-solid fa-flask mr-1" aria-hidden="true"></i> Protótipo demonstrativo: imagens e valores dos produtos avulsos são ilustrativos. Não informe dados reais.
+        <i class="fa-solid fa-flask mr-1" aria-hidden="true"></i> Protótipo demonstrativo: imagens e valores de coroas e urnas são ilustrativos. Não informe dados reais.
     </div>
     <header class="border-b border-gray-200 bg-white">
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-            <a href="#loja" id="marca-loja" class="flex items-center gap-3 text-marca-primaria">
-                <img src="favicon-verde.png" alt="" class="h-11 w-11 object-contain">
-                <span class="text-sm font-bold leading-tight sm:text-base">Campo Santo<br>Familiar</span>
+            <a href="#loja" id="marca-loja" class="flex items-center">
+                <img src="imagens/logo-verde.png" alt="Campo Santo Familiar" class="h-14 w-auto object-contain sm:h-16">
             </a>
             <span class="rounded-full bg-marca-clara px-4 py-2 text-xs font-bold text-marca-primaria sm:text-sm">
                 <i class="fa-solid fa-store mr-1" aria-hidden="true"></i> Loja para visitantes
@@ -56,7 +70,7 @@
         <section id="tela-loja" data-tela>
             <div class="grid overflow-hidden rounded-3xl bg-marca-primaria text-white shadow-xl md:grid-cols-2">
                 <div class="px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
-                    <span class="text-xs font-bold uppercase tracking-widest text-marca-destaque">Cuidado em todos os momentos</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-marca-destaque-claro">Cuidado em todos os momentos</span>
                     <h1 class="mt-4 text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Cuidado que acolhe, em todos os momentos.</h1>
                     <p class="mt-4 max-w-xl text-sm leading-7 text-white/80 sm:text-base">Planos para cuidar de quem você ama e homenagens para expressar carinho e respeito.</p>
                     <div class="mt-7 flex flex-wrap gap-3"><a href="#planos" class="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-marca-primaria transition hover:bg-marca-clara">Conhecer os planos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a><a href="#homenagens" class="inline-flex items-center gap-2 rounded-xl border border-white/40 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10">Ver produtos</a></div>
@@ -82,17 +96,38 @@
             <div class="mt-16" id="homenagens">
                 <p class="text-xs font-bold uppercase tracking-widest text-marca-destaque">Cuidado em cada detalhe</p>
                 <h2 class="mt-2 text-2xl font-bold text-marca-primaria sm:text-3xl">Homenagens e produtos</h2>
-                <p class="mt-2 text-sm text-gray-600">Escolha uma forma de homenagear com carinho e respeito.</p>
+                <p class="mt-2 text-sm text-gray-600">Selecione uma categoria para conhecer as opções disponíveis.</p>
             </div>
-            <div class="mt-8 flex items-end justify-between gap-3"><div><h3 class="text-xl font-bold text-gray-800">Coroas de flores</h3><p class="mt-1 text-sm text-gray-500">Uma homenagem feita com delicadeza.</p></div><span class="text-xs text-gray-500">Imagens ilustrativas</span></div>
-            <div id="produtos-coroas" class="mt-4 grid gap-5 sm:grid-cols-2"></div>
-            <div class="mt-10 flex items-end justify-between gap-3"><div><h3 class="text-xl font-bold text-gray-800">Urnas funerárias</h3><p class="mt-1 text-sm text-gray-500">Opções para este momento de despedida.</p></div><span class="text-xs text-gray-500">Imagens ilustrativas</span></div>
-            <div id="produtos-urnas" class="mt-4 grid gap-5 sm:grid-cols-2"></div>
+            <div class="mt-6 grid gap-3 sm:grid-cols-3" role="group" aria-label="Categorias de produtos">
+                <button type="button" data-categoria-produto="coroas" aria-pressed="true" aria-controls="categoria-coroas" class="rounded-2xl border-2 border-marca-primaria bg-marca-primaria p-5 text-left text-white">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-spa text-2xl" aria-hidden="true"></i><span class="font-bold">Coroas de flores</span></span>
+                </button>
+                <button type="button" data-categoria-produto="urnas" aria-pressed="false" aria-controls="categoria-urnas" class="rounded-2xl border-2 border-transparent bg-white p-5 text-left text-marca-primaria">
+                    <span class="flex items-center gap-3"><svg class="h-6 w-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l4 4-2.5 13h-11L4 7l4-4Z"/><path d="M12 7v7m-2.5-4.5h5"/></svg><span class="font-bold">Urnas funerárias</span></span>
+                </button>
+                <button type="button" data-categoria-produto="ossuarios" aria-pressed="false" aria-controls="categoria-ossuarios" class="rounded-2xl border-2 border-transparent bg-white p-5 text-left text-marca-primaria">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-building text-2xl" aria-hidden="true"></i><span class="font-bold">Ossuários</span></span>
+                </button>
+            </div>
+            <div aria-live="polite">
+                <section id="categoria-coroas" data-grupo-produto="coroas">
+                    <div class="mt-8 flex items-end justify-between gap-3"><div><h3 class="text-xl font-bold text-gray-800">Coroas de flores</h3><p class="mt-1 text-sm text-gray-500">Uma homenagem feita com delicadeza.</p></div><span class="text-xs text-gray-500">Imagens ilustrativas</span></div>
+                    <div id="produtos-coroas" class="mt-4 grid gap-5 sm:grid-cols-2"></div>
+                </section>
+                <section id="categoria-urnas" data-grupo-produto="urnas" hidden>
+                    <div class="mt-8 flex items-end justify-between gap-3"><div><h3 class="text-xl font-bold text-gray-800">Urnas funerárias</h3><p class="mt-1 text-sm text-gray-500">Opções para este momento de despedida.</p></div><span class="text-xs text-gray-500">Imagens ilustrativas</span></div>
+                    <div id="produtos-urnas" class="mt-4 grid gap-5 sm:grid-cols-2"></div>
+                </section>
+                <section id="categoria-ossuarios" data-grupo-produto="ossuarios" hidden>
+                    <div class="mt-8 flex items-end justify-between gap-3"><div><h3 class="text-xl font-bold text-gray-800">Ossuários</h3><p class="mt-1 text-sm text-gray-500">Escolha a opção que melhor atende às necessidades da sua família.</p></div><span class="text-xs text-gray-500">Imagem ilustrativa</span></div>
+                    <div id="produtos-ossuarios" class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+                </section>
+            </div>
         </section>
 
         <section id="tela-dados" data-tela hidden>
             <button type="button" data-voltar="loja" class="mb-6 text-sm font-semibold text-marca-primaria hover:underline"><i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i>Voltar à loja</button>
-            <div class="mb-8"><p class="text-xs font-bold uppercase tracking-widest text-marca-destaque">Etapa 1 de 2 · Seus dados</p><h1 class="mt-2 text-3xl font-bold text-marca-primaria">Vamos começar</h1><p class="mt-2 text-sm text-gray-600">Preencha os dados para continuar. Neste protótipo, use apenas informações fictícias.</p></div>
+            <div class="mb-8"><p id="etapa-dados" class="text-xs font-bold uppercase tracking-widest text-marca-destaque">Etapa 1 de 2 · Seus dados</p><h1 class="mt-2 text-3xl font-bold text-marca-primaria">Vamos começar</h1><p class="mt-2 text-sm text-gray-600">Preencha os dados para continuar. Neste protótipo, use apenas informações fictícias.</p></div>
             <div class="grid items-start gap-6 lg:grid-cols-3">
                 <form id="formulario-compra" class="space-y-6 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-8 lg:col-span-2">
                     <div><h2 class="text-lg font-bold text-gray-800">Dados do comprador</h2><p class="mt-1 text-sm text-gray-500">O e-mail será utilizado para demonstrar o acompanhamento da compra.</p></div>
@@ -108,15 +143,37 @@
                         <div><label for="endereco" class="mb-2 block text-sm font-medium text-gray-700">Endereço de entrega</label><textarea id="endereco" name="endereco" rows="2" maxlength="250" placeholder="Rua, número, complemento, bairro e cidade" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-sm"></textarea></div>
                         <div class="grid gap-5 sm:grid-cols-2">
                             <div><label for="data-velorio" class="mb-2 block text-sm font-medium text-gray-700">Data do velório</label><input id="data-velorio" name="data-velorio" type="date" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-sm"></div>
-                            <div><label for="hora-velorio" class="mb-2 block text-sm font-medium text-gray-700">Horário do velório</label><input id="hora-velorio" name="hora-velorio" type="time" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-sm"></div>
+                            <div><label for="hora-velorio" class="mb-2 block text-sm font-medium text-gray-700">Horário do velório</label><input id="hora-velorio" name="hora-velorio" type="time" aria-describedby="prazo-entrega erro-prazo-entrega" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-sm"></div>
                         </div>
+                        <p id="prazo-entrega" class="text-sm text-gray-500">A data e o horário do velório devem ter pelo menos 3 horas de antecedência para preparação e entrega.</p>
+                        <p id="erro-prazo-entrega" role="alert" hidden class="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"></p>
                     </fieldset>
-                    <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-marca-primaria px-5 py-4 text-sm font-bold text-white transition hover:bg-marca-secundaria">Continuar para pagamento <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-marca-primaria px-5 py-4 text-sm font-bold text-white transition hover:bg-marca-secundaria"><span id="texto-continuar-dados">Continuar para pagamento</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                     <p class="text-center text-xs text-gray-500"><i class="fa-solid fa-lock mr-1" aria-hidden="true"></i> Os dados ficam apenas nesta página e são perdidos ao recarregá-la. Nada será enviado.</p>
                 </form>
                 <aside class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm" aria-label="Resumo da compra">
                     <h2 class="font-bold text-gray-800">Resumo da compra</h2>
                     <div id="resumo-checkout" class="mt-5"></div>
+                </aside>
+            </div>
+        </section>
+
+        <section id="tela-dependentes" data-tela hidden>
+            <button type="button" data-voltar="dados" class="mb-6 text-sm font-semibold text-marca-primaria hover:underline"><i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i>Voltar aos dados</button>
+            <div class="mb-8"><p class="text-xs font-bold uppercase tracking-widest text-marca-destaque">Etapa 2 de 3 · Dependentes</p><h1 class="mt-2 text-3xl font-bold text-marca-primaria">Cadastre os dependentes</h1><p class="mt-2 text-sm text-gray-600">Adicione de 1 a 9 dependentes e selecione um deles como responsável financeiro. Use apenas dados fictícios.</p></div>
+            <div class="grid items-start gap-6 lg:grid-cols-3">
+                <form id="formulario-dependentes" class="space-y-6 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-8 lg:col-span-2">
+                    <div id="lista-dependentes" class="space-y-5"></div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button type="button" id="adicionar-dependente" class="rounded-xl border border-marca-primaria px-4 py-3 text-sm font-bold text-marca-primaria hover:bg-marca-clara"><i class="fa-solid fa-plus mr-2" aria-hidden="true"></i>Adicionar dependente</button>
+                        <span id="quantidade-dependentes" class="text-sm text-gray-500" aria-live="polite"></span>
+                    </div>
+                    <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-marca-primaria px-5 py-4 text-sm font-bold text-white transition hover:bg-marca-secundaria">Continuar para pagamento <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    <p class="text-center text-xs text-gray-500"><i class="fa-solid fa-lock mr-1" aria-hidden="true"></i> Os dados ficam apenas nesta página e são perdidos ao recarregá-la. Nada será enviado.</p>
+                </form>
+                <aside class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm" aria-label="Resumo da compra">
+                    <h2 class="font-bold text-gray-800">Resumo da compra</h2>
+                    <div id="resumo-dependentes" class="mt-5"></div>
                 </aside>
             </div>
         </section>
@@ -220,7 +277,7 @@
     <dialog id="modal-pagamento" aria-labelledby="titulo-modal" aria-describedby="descricao-modal" class="w-[calc(100%-2rem)] max-w-md rounded-3xl p-0 shadow-2xl">
         <div class="p-7 sm:p-8">
             <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-marca-clara text-2xl text-marca-primaria"><i class="fa-solid fa-credit-card" aria-hidden="true"></i></div>
-            <p class="mt-5 text-xs font-bold uppercase tracking-widest text-marca-destaque">Etapa 2 de 2 · Simulação</p>
+            <p id="etapa-pagamento" class="mt-5 text-xs font-bold uppercase tracking-widest text-marca-destaque">Etapa 2 de 2 · Simulação</p>
             <h2 id="titulo-modal" class="mt-2 text-2xl font-bold text-marca-primaria">Momento do pagamento</h2>
             <p id="descricao-modal" class="mt-3 text-sm leading-6 text-gray-600">Na loja real, você será direcionado para uma página externa da Cielo para realizar o pagamento. Neste protótipo, nenhum pagamento será feito.</p>
             <button type="button" id="confirmar-pagamento" class="mt-6 w-full rounded-xl bg-marca-primaria px-5 py-4 text-sm font-bold text-white hover:bg-marca-secundaria">Avançar para o próximo passo <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i></button>
@@ -259,7 +316,10 @@
             { tipo: 'demanda', categoria: 'coroas', nome: 'Coroa de flores Serena', descricao: 'Uma homenagem delicada em tons claros.', imagem: 'imagens/coroa-serena.svg', preco: 'R$ 250,00' },
             { tipo: 'demanda', categoria: 'coroas', nome: 'Coroa de flores Afeto', descricao: 'Uma homenagem acolhedora em tons suaves.', imagem: 'imagens/coroa-afeto.svg', preco: 'R$ 320,00' },
             { tipo: 'demanda', categoria: 'urnas', nome: 'Urna funerária Clássica', descricao: 'Uma opção em tom de madeira clara.', imagem: 'imagens/urna-classica.svg', preco: 'R$ 1.500,00' },
-            { tipo: 'demanda', categoria: 'urnas', nome: 'Urna funerária Harmonia', descricao: 'Uma opção em tom de madeira escura.', imagem: 'imagens/urna-harmonia.svg', preco: 'R$ 1.800,00' }
+            { tipo: 'demanda', categoria: 'urnas', nome: 'Urna funerária Harmonia', descricao: 'Uma opção em tom de madeira escura.', imagem: 'imagens/urna-harmonia.svg', preco: 'R$ 1.800,00' },
+            { tipo: 'ossuario', categoria: 'ossuarios', nome: 'Ossuário simples', descricao: 'Opção de ossuário simples.', imagem: 'imagens/ossuario.svg', preco: 'R$ 2.000,00' },
+            { tipo: 'ossuario', categoria: 'ossuarios', nome: 'Ossuário duplo', descricao: 'Opção de ossuário duplo.', imagem: 'imagens/ossuario.svg', preco: 'R$ 3.200,00' },
+            { tipo: 'ossuario', categoria: 'ossuarios', nome: 'Ossuário quádruplo', descricao: 'Opção de ossuário quádruplo.', imagem: 'imagens/ossuario.svg', preco: 'R$ 6.000,00' }
         ];
         const statusDemanda = {
             aguardando: { cor: 'alerta', titulo: 'Aguardando fornecedor', descricao: 'Seu pagamento foi confirmado na simulação. Na loja real, a solicitação será enviada por WhatsApp aos fornecedores parceiros e aguardará uma resposta.' },
@@ -280,7 +340,10 @@
         let produtoSelecionado = null;
         let pedido = null;
         let fluxoAtual = 0;
+        let proximoDependente = 0;
         const formulario = document.getElementById('formulario-compra');
+        const formularioDependentes = document.getElementById('formulario-dependentes');
+        const listaDependentes = document.getElementById('lista-dependentes');
         const modalPagamento = document.getElementById('modal-pagamento');
 
         function escapar(texto) {
@@ -291,6 +354,7 @@
 
         function mostrarTela(tela, registrar = true) {
             if (tela !== 'loja' && !produtoSelecionado) tela = 'loja';
+            if (tela === 'dependentes' && produtoSelecionado.tipo !== 'recorrente') tela = 'dados';
             if (['obrigado', 'email', 'acompanhamento'].includes(tela) && !pedido) tela = 'dados';
             document.querySelectorAll('[data-tela]').forEach(secao => {
                 secao.hidden = secao.id !== 'tela-' + tela;
@@ -306,8 +370,8 @@
 
         function valorProduto(produto) {
             return produto.tipo === 'recorrente'
-                ? '<span class="text-xs text-gray-500">Mensalidade a partir de</span><p class="mt-1 text-2xl font-bold text-marca-primaria">' + produto.mensalidade + '<span class="text-xs font-normal text-gray-500"> / mês</span></p><p class="mt-2 text-xs text-gray-500">Valor da adesão: a definir</p>'
-                : '<span class="text-xs text-gray-500">Valor ilustrativo</span><p class="mt-1 text-2xl font-bold text-marca-primaria">' + produto.preco + '</p>';
+                ? '<span class="text-xs text-gray-500">Mensalidade a partir de</span><p class="mt-1 font-serif text-2xl font-semibold text-marca-primaria">' + produto.mensalidade + '<span class="font-sans text-xs font-normal text-gray-500"> / mês</span></p><p class="mt-2 text-xs text-gray-500">Valor da adesão: a definir</p>'
+                : '<span class="text-xs text-gray-500">' + (produto.tipo === 'ossuario' ? 'Valor' : 'Valor ilustrativo') + '</span><p class="mt-1 font-serif text-2xl font-semibold text-marca-primaria">' + produto.preco + '</p>';
         }
 
         function resumoProduto(produto) {
@@ -318,7 +382,7 @@
             produtos.forEach(produto => {
                 const card = document.createElement('article');
                 card.className = 'group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg lg:flex-row';
-                card.innerHTML = '<div class="overflow-hidden bg-marca-clara lg:w-2/5"><img src="' + produto.imagem + '" alt="Ilustração de ' + escapar(produto.nome) + '" class="h-52 w-full object-cover transition duration-500 group-hover:scale-105 lg:h-full"></div><div class="flex flex-1 flex-col p-5"><p class="text-xs font-bold uppercase tracking-wider text-marca-destaque">' + (produto.categoria === 'coroas' ? 'Homenagem floral' : 'Urna funerária') + '</p><h4 class="mt-2 text-lg font-bold text-gray-800">' + escapar(produto.nome) + '</h4><p class="mt-2 flex-1 text-sm leading-6 text-gray-500">' + escapar(produto.descricao) + '</p><div class="mt-5">' + valorProduto(produto) + '</div><button type="button" aria-label="Comprar ' + escapar(produto.nome) + '" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-marca-primaria px-5 py-3 text-sm font-bold text-white transition hover:bg-marca-secundaria">Comprar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div>';
+                card.innerHTML = '<div class="overflow-hidden bg-marca-clara lg:w-2/5"><img src="' + produto.imagem + '" alt="Ilustração de ' + escapar(produto.nome) + '" class="h-52 w-full object-cover transition duration-500 group-hover:scale-105 lg:h-full"></div><div class="flex flex-1 flex-col p-5"><p class="text-xs font-bold uppercase tracking-wider text-marca-destaque">' + (produto.categoria === 'coroas' ? 'Homenagem floral' : produto.categoria === 'urnas' ? 'Urna funerária' : 'Ossuário') + '</p><h4 class="mt-2 text-lg font-bold text-gray-800">' + escapar(produto.nome) + '</h4><p class="mt-2 flex-1 text-sm leading-6 text-gray-500">' + escapar(produto.descricao) + '</p><div class="mt-5">' + valorProduto(produto) + '</div><button type="button" aria-label="Comprar ' + escapar(produto.nome) + '" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-marca-primaria px-5 py-3 text-sm font-bold text-white transition hover:bg-marca-secundaria">Comprar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div>';
                 card.querySelector('button').addEventListener('click', () => selecionarProduto(produto));
                 document.getElementById('produtos-' + produto.categoria).appendChild(card);
             });
@@ -338,7 +402,7 @@
             planos.filter(plano => plano.categoria === categoria).forEach(plano => {
                 const card = document.createElement('article');
                 card.className = 'flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg';
-                card.innerHTML = '<div class="relative h-40 overflow-hidden bg-marca-primaria"><img src="' + escapar(plano.imagem) + '" alt="" class="h-full w-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-marca-escura/80 to-transparent"></div><span class="absolute bottom-4 left-5 text-xs font-bold uppercase tracking-wider text-white">Cuidado para sua família</span></div><div class="flex flex-1 flex-col p-5"><h4 class="text-xl font-bold text-marca-primaria">' + escapar(plano.nomePlano) + '</h4><p class="mt-3 text-sm text-gray-600"><i class="fa-regular fa-circle-check mr-2 text-green-700" aria-hidden="true"></i>' + escapar(plano.idade) + '</p><div class="mt-5 flex-1 border-t border-gray-100 pt-4"><span class="text-xs text-gray-500">A partir de</span><p class="mt-1 text-2xl font-bold text-marca-primaria">' + plano.mensalidade + '<span class="text-xs font-normal text-gray-500"> / mês</span></p></div><button type="button" aria-label="Selecionar ' + escapar(plano.nome) + '" class="mt-5 w-full rounded-xl bg-marca-primaria px-4 py-3 text-sm font-bold text-white transition hover:bg-marca-secundaria">Selecionar plano <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i></button></div>';
+                card.innerHTML = '<div class="relative h-40 overflow-hidden bg-marca-primaria"><img src="' + escapar(plano.imagem) + '" alt="" class="h-full w-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-marca-escura/80 to-transparent"></div><span class="absolute bottom-4 left-5 text-xs font-bold uppercase tracking-wider text-white">Cuidado para sua família</span></div><div class="flex flex-1 flex-col p-5"><h4 class="text-xl font-bold text-marca-primaria">' + escapar(plano.nomePlano) + '</h4><p class="mt-3 text-sm text-gray-600"><i class="fa-regular fa-circle-check mr-2 text-green-700" aria-hidden="true"></i>' + escapar(plano.idade) + '</p><div class="mt-5 flex-1 border-t border-gray-100 pt-4"><span class="text-xs text-gray-500">A partir de</span><p class="mt-1 font-serif text-2xl font-semibold text-marca-primaria">' + plano.mensalidade + '<span class="font-sans text-xs font-normal text-gray-500"> / mês</span></p></div><button type="button" aria-label="Selecionar ' + escapar(plano.nome) + '" class="mt-5 w-full rounded-xl bg-marca-primaria px-4 py-3 text-sm font-bold text-white transition hover:bg-marca-secundaria">Selecionar plano <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i></button></div>';
                 card.querySelector('button').addEventListener('click', () => selecionarProduto(plano));
                 lista.appendChild(card);
             });
@@ -348,19 +412,98 @@
             botao.addEventListener('click', () => mostrarPlanos(botao.dataset.categoria));
         });
 
+        document.querySelectorAll('[data-categoria-produto]').forEach(botao => {
+            botao.addEventListener('click', () => {
+                const categoria = botao.dataset.categoriaProduto;
+                document.querySelectorAll('[data-categoria-produto]').forEach(opcao => {
+                    const ativa = opcao === botao;
+                    opcao.setAttribute('aria-pressed', String(ativa));
+                    opcao.className = 'rounded-2xl border-2 p-5 text-left transition ' + (ativa ? 'border-marca-primaria bg-marca-primaria text-white' : 'border-transparent bg-white text-marca-primaria hover:border-marca-primaria/30');
+                });
+                document.querySelectorAll('[data-grupo-produto]').forEach(grupo => {
+                    grupo.hidden = grupo.dataset.grupoProduto !== categoria;
+                });
+            });
+        });
+
         function selecionarProduto(produto) {
             fluxoAtual++;
             produtoSelecionado = produto;
             pedido = null;
             formulario.reset();
+            listaDependentes.replaceChildren();
+            proximoDependente = 0;
+            const plano = produto.tipo === 'recorrente';
+            if (plano) adicionarDependente();
             document.getElementById('cpf').setCustomValidity('');
+            limparErroPrazo();
             const sobDemanda = produto.tipo === 'demanda';
             document.getElementById('dados-entrega').hidden = !sobDemanda;
             ['endereco', 'data-velorio', 'hora-velorio'].forEach(id => {
                 document.getElementById(id).required = sobDemanda;
             });
             document.getElementById('resumo-checkout').innerHTML = resumoProduto(produto);
+            document.getElementById('resumo-dependentes').innerHTML = resumoProduto(produto);
+            document.getElementById('etapa-dados').textContent = 'Etapa 1 de ' + (plano ? '3' : '2') + ' · Seus dados';
+            document.getElementById('etapa-pagamento').textContent = 'Etapa ' + (plano ? '3 de 3' : '2 de 2') + ' · Simulação';
+            document.getElementById('texto-continuar-dados').textContent = plano ? 'Continuar para dependentes' : 'Continuar para pagamento';
+            document.getElementById('fechar-pagamento').textContent = plano ? 'Voltar aos dependentes' : 'Voltar aos dados';
             mostrarTela('dados');
+        }
+
+        function atualizarListaDependentes() {
+            const dependentes = listaDependentes.querySelectorAll('[data-dependente]');
+            dependentes.forEach((dependente, indice) => {
+                dependente.querySelector('legend').textContent = 'Dependente ' + (indice + 1);
+                const remover = dependente.querySelector('[data-remover-dependente]');
+                remover.hidden = dependentes.length === 1;
+                remover.setAttribute('aria-label', 'Remover dependente ' + (indice + 1));
+            });
+            document.getElementById('quantidade-dependentes').textContent = dependentes.length + ' de 9 dependentes';
+            document.getElementById('adicionar-dependente').disabled = dependentes.length >= 9;
+        }
+
+        function adicionarDependente() {
+            if (listaDependentes.children.length >= 9) return;
+            const id = ++proximoDependente;
+            const dependente = document.createElement('fieldset');
+            dependente.dataset.dependente = '';
+            dependente.className = 'space-y-4 rounded-xl border border-gray-200 bg-gray-50 p-4 sm:p-5';
+            dependente.innerHTML = `
+                <legend class="px-1 font-bold text-marca-primaria"></legend>
+                <div class="flex flex-wrap justify-between gap-3">
+                    <button type="button" data-preencher-dependente class="text-sm font-semibold text-marca-primaria underline">Preencher com dados fictícios</button>
+                    <button type="button" data-remover-dependente class="text-sm font-semibold text-red-700 hover:underline">Remover</button>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="sm:col-span-2"><label for="dependente-nome-${id}" class="mb-2 block text-sm font-medium text-gray-700">Nome completo</label><input id="dependente-nome-${id}" data-campo="nome" required pattern=".*\\S.*" maxlength="120" autocomplete="off" placeholder="Nome fictício" class="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm"></div>
+                    <div><label for="dependente-cpf-${id}" class="mb-2 block text-sm font-medium text-gray-700">CPF</label><input id="dependente-cpf-${id}" data-campo="cpf" required inputmode="numeric" maxlength="14" autocomplete="off" placeholder="000.000.000-00" aria-describedby="ajuda-cpf-${id}" class="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm"><p id="ajuda-cpf-${id}" class="mt-1 text-xs text-gray-500">Informe 11 dígitos fictícios.</p></div>
+                    <div><label for="dependente-parentesco-${id}" class="mb-2 block text-sm font-medium text-gray-700">Parentesco</label><input id="dependente-parentesco-${id}" data-campo="parentesco" required pattern=".*\\S.*" maxlength="100" autocomplete="off" placeholder="Ex.: filho(a)" class="w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm"></div>
+                </div>
+                <label class="flex items-center gap-2 text-sm font-semibold text-marca-primaria"><input type="radio" name="responsavel-financeiro" value="${id}" required class="h-4 w-4 accent-marca-primaria"> Responsável financeiro</label>`;
+            dependente.querySelector('[data-preencher-dependente]').addEventListener('click', () => {
+                dependente.querySelector('[data-campo="nome"]').value = 'Pessoa Exemplo ' + id;
+                const cpf = dependente.querySelector('[data-campo="cpf"]');
+                cpf.value = String(id).padStart(11, '0');
+                cpf.setCustomValidity('');
+                dependente.querySelector('[data-campo="parentesco"]').value = 'Familiar';
+            });
+            dependente.querySelector('[data-remover-dependente]').addEventListener('click', () => {
+                dependente.remove();
+                atualizarListaDependentes();
+            });
+            dependente.querySelector('[data-campo="cpf"]').addEventListener('input', event => event.target.setCustomValidity(''));
+            listaDependentes.appendChild(dependente);
+            atualizarListaDependentes();
+        }
+
+        document.getElementById('adicionar-dependente').addEventListener('click', adicionarDependente);
+
+        function validarDependentes() {
+            listaDependentes.querySelectorAll('[data-campo="cpf"]').forEach(cpf => {
+                cpf.setCustomValidity(cpf.value.replace(/\D/g, '').length === 11 ? '' : 'Informe 11 dígitos fictícios para o CPF.');
+            });
+            return formularioDependentes.reportValidity();
         }
 
         function atualizarAcompanhamento() {
@@ -373,14 +516,23 @@
             const sobDemanda = produto.tipo === 'demanda';
             document.getElementById('aviso-obrigado').textContent = sobDemanda
                 ? 'Seu pedido ficará sujeito à disponibilidade dos fornecedores parceiros.'
-                : 'O administrativo receberá seus dados para providenciar o cadastro no iVertex e a formalização do contrato.';
+                : produto.tipo === 'ossuario'
+                    ? 'O administrativo analisará sua compra e dará continuidade ao atendimento.'
+                    : 'O administrativo receberá seus dados para providenciar o cadastro no iVertex e a formalização do contrato.';
             document.getElementById('painel-demonstracao').hidden = !sobDemanda;
-            const status = sobDemanda ? statusDemanda[pedido.status] : { cor: 'alerta', titulo: 'Contratação em análise', descricao: 'O administrativo realizará o cadastro no iVertex e as tratativas para assinatura do contrato. Após o cadastro e a ativação do plano, você poderá acessar o portal e gerar o Pix das mensalidades.' };
+            const status = sobDemanda ? statusDemanda[pedido.status] : produto.tipo === 'ossuario'
+                ? { cor: 'alerta', titulo: 'Compra em análise', descricao: 'O administrativo analisará sua compra e dará continuidade ao atendimento.' }
+                : { cor: 'alerta', titulo: 'Contratação em análise', descricao: 'O administrativo realizará o cadastro no iVertex e as tratativas para assinatura do contrato. Após o cadastro e a ativação do plano, você poderá acessar o portal e gerar o Pix das mensalidades.' };
             document.getElementById('status-cartao').className = 'rounded-2xl border p-6 shadow-sm ' + coresStatus[status.cor].cartao;
             document.getElementById('status-titulo').textContent = status.titulo;
             document.getElementById('status-descricao').textContent = status.descricao;
             const detalhes = [['Comprador', pedido.nome], ['E-mail', pedido.email], ['Produto', produto.nome]];
             if (sobDemanda) detalhes.push(['Endereço de entrega', pedido.endereco], ['Data do velório', pedido.data.split('-').reverse().join('/')], ['Horário do velório', pedido.hora]);
+            if (produto.tipo === 'recorrente') {
+                pedido.dependentes.forEach((dependente, indice) => {
+                    detalhes.push(['Dependente ' + (indice + 1) + (dependente.responsavel ? ' · Responsável financeiro' : ''), dependente.nome + ' · CPF: ' + dependente.cpf + ' · Parentesco: ' + dependente.parentesco]);
+                });
+            }
             document.getElementById('detalhes-compra').innerHTML = detalhes.map(([rotulo, valor]) => '<div class="flex flex-col gap-1 py-3 sm:flex-row sm:justify-between sm:gap-5"><dt class="text-gray-500">' + escapar(rotulo) + '</dt><dd class="break-words font-medium text-gray-800 sm:text-right">' + escapar(valor) + '</dd></div>').join('');
             document.querySelectorAll('[data-status]').forEach(botao => {
                 const ativo = botao.dataset.status === pedido.status;
@@ -403,16 +555,72 @@
             document.getElementById('botoes-status').appendChild(botao);
         });
 
+        function limparErroPrazo() {
+            const erro = document.getElementById('erro-prazo-entrega');
+            erro.hidden = true;
+            erro.textContent = '';
+            document.getElementById('hora-velorio').removeAttribute('aria-invalid');
+        }
+
+        function validarPrazoEntrega() {
+            limparErroPrazo();
+            if (produtoSelecionado.tipo !== 'demanda') return true;
+
+            const data = document.getElementById('data-velorio').value;
+            const hora = document.getElementById('hora-velorio').value;
+            const horario = new Date(data + 'T' + hora).getTime();
+            if (Number.isFinite(horario) && horario - Date.now() >= 3 * 60 * 60 * 1000) return true;
+
+            const erro = document.getElementById('erro-prazo-entrega');
+            erro.textContent = 'Escolha uma data e horário com pelo menos 3 horas de antecedência para a preparação e entrega.';
+            erro.hidden = false;
+            document.getElementById('hora-velorio').setAttribute('aria-invalid', 'true');
+            return false;
+        }
+
+        ['data-velorio', 'hora-velorio'].forEach(id => {
+            document.getElementById(id).addEventListener('input', limparErroPrazo);
+        });
+
         formulario.addEventListener('submit', event => {
             event.preventDefault();
             const cpf = document.getElementById('cpf');
             cpf.setCustomValidity(cpf.value.replace(/\D/g, '').length === 11 ? '' : 'Informe 11 dígitos fictícios para o CPF.');
             if (!formulario.reportValidity()) return;
-            modalPagamento.showModal();
+            if (!validarPrazoEntrega()) {
+                document.getElementById('hora-velorio').focus();
+                return;
+            }
+            if (produtoSelecionado.tipo === 'recorrente') {
+                mostrarTela('dependentes');
+            } else {
+                modalPagamento.showModal();
+            }
+        });
+        formularioDependentes.addEventListener('submit', event => {
+            event.preventDefault();
+            if (validarDependentes()) modalPagamento.showModal();
         });
         document.getElementById('cpf').addEventListener('input', event => event.target.setCustomValidity(''));
         document.getElementById('fechar-pagamento').addEventListener('click', () => modalPagamento.close());
         document.getElementById('confirmar-pagamento').addEventListener('click', () => {
+            if (!formulario.checkValidity()) {
+                modalPagamento.close();
+                mostrarTela('dados');
+                formulario.reportValidity();
+                return;
+            }
+            if (produtoSelecionado.tipo === 'recorrente' && !formularioDependentes.checkValidity()) {
+                modalPagamento.close();
+                mostrarTela('dependentes');
+                validarDependentes();
+                return;
+            }
+            if (!validarPrazoEntrega()) {
+                modalPagamento.close();
+                document.getElementById('hora-velorio').focus();
+                return;
+            }
             const dados = new FormData(formulario);
             pedido = {
                 numero: 'DEMO-' + String(Math.floor(Math.random() * 900000) + 100000),
@@ -422,6 +630,12 @@
                 endereco: dados.get('endereco') ? dados.get('endereco').trim() : '',
                 data: dados.get('data-velorio') || '',
                 hora: dados.get('hora-velorio') || '',
+                dependentes: produtoSelecionado.tipo === 'recorrente' ? Array.from(listaDependentes.querySelectorAll('[data-dependente]'), dependente => ({
+                    nome: dependente.querySelector('[data-campo="nome"]').value.trim(),
+                    cpf: dependente.querySelector('[data-campo="cpf"]').value.trim(),
+                    parentesco: dependente.querySelector('[data-campo="parentesco"]').value.trim(),
+                    responsavel: dependente.querySelector('[name="responsavel-financeiro"]').checked
+                })) : [],
                 status: 'aguardando'
             };
             modalPagamento.close();
